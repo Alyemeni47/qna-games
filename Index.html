@@ -1,0 +1,1651 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>لعبة سؤال وجواب - Q&A Game</title>
+    <style>
+        /* CSS مباشر في نفس الملف */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --primary: #6c63ff;
+            --primary-dark: #554fd8;
+            --secondary: #ff6584;
+            --secondary-dark: #e04e6d;
+            --accent: #36d1dc;
+            --accent-dark: #2ab7c0;
+            --light: #f8f9fa;
+            --dark: #212529;
+            --gray: #6c757d;
+            --light-gray: #e9ecef;
+            --success: #28a745;
+            --warning: #ffc107;
+            --danger: #dc3545;
+            --border-radius: 12px;
+            --shadow: 0 8px 20px rgba(0, 0, 0, 0.1);
+            --shadow-hover: 0 12px 25px rgba(0, 0, 0, 0.15);
+            --transition: all 0.3s ease;
+        }
+
+        html[dir="rtl"] {
+            text-align: right;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        html[dir="ltr"] {
+            text-align: left;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        body {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: var(--dark);
+            min-height: 100vh;
+            overflow-x: hidden;
+            padding: 20px;
+            transition: var(--transition);
+            font-family: 'Segoe UI', Tahoma, sans-serif;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            background-color: rgba(255, 255, 255, 0.95);
+            border-radius: var(--border-radius);
+            box-shadow: var(--shadow);
+            overflow: hidden;
+            padding: 20px;
+        }
+
+        /* شريط تبديل اللغة */
+        .language-switcher {
+            display: flex;
+            justify-content: flex-end;
+            margin-bottom: 20px;
+        }
+
+        .lang-btn {
+            background-color: var(--light-gray);
+            border: none;
+            padding: 8px 16px;
+            border-radius: 20px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: var(--transition);
+            margin: 0 5px;
+            font-family: inherit;
+        }
+
+        .lang-btn.active {
+            background-color: var(--primary);
+            color: white;
+        }
+
+        .lang-btn:hover:not(.active) {
+            background-color: #d1d1d1;
+        }
+
+        /* رأس الصفحة */
+        .header {
+            text-align: center;
+            padding: 30px 20px;
+            background: linear-gradient(to right, var(--primary), var(--accent));
+            border-radius: var(--border-radius);
+            color: white;
+            margin-bottom: 30px;
+        }
+
+        .logo i {
+            font-size: 4rem;
+            margin-bottom: 15px;
+        }
+
+        .logo h1 {
+            font-size: 2.5rem;
+            margin-bottom: 10px;
+        }
+
+        .logo h2 {
+            font-size: 1.5rem;
+            font-weight: 400;
+        }
+
+        /* المحتوى الرئيسي */
+        .main-content {
+            padding: 0 20px;
+        }
+
+        .welcome-section {
+            background-color: var(--light);
+            padding: 30px;
+            border-radius: var(--border-radius);
+            margin-bottom: 30px;
+            text-align: center;
+        }
+
+        .welcome-text h3 {
+            color: var(--primary);
+            margin-bottom: 15px;
+            font-size: 2rem;
+        }
+
+        .welcome-text p {
+            color: var(--gray);
+            font-size: 1.2rem;
+            line-height: 1.6;
+        }
+
+        .stats {
+            display: flex;
+            justify-content: space-around;
+            margin-top: 40px;
+            flex-wrap: wrap;
+        }
+
+        .stat-item {
+            display: flex;
+            align-items: center;
+            background: white;
+            padding: 20px;
+            border-radius: var(--border-radius);
+            box-shadow: var(--shadow);
+            min-width: 180px;
+            margin: 10px;
+        }
+
+        .stat-item i {
+            font-size: 2.5rem;
+            color: var(--primary);
+            margin-left: 15px;
+        }
+
+        .stat-number {
+            display: block;
+            font-size: 2.2rem;
+            font-weight: 700;
+            color: var(--primary);
+        }
+
+        /* زر البدء */
+        .start-section {
+            text-align: center;
+            margin: 50px 0;
+        }
+
+        .start-btn {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            background: linear-gradient(to right, var(--secondary), var(--secondary-dark));
+            color: white;
+            text-decoration: none;
+            padding: 22px 50px;
+            border-radius: 50px;
+            font-size: 1.8rem;
+            font-weight: 700;
+            box-shadow: var(--shadow);
+            transition: var(--transition);
+            animation: pulse 2s infinite;
+        }
+
+        .start-btn i {
+            margin-left: 15px;
+            font-size: 2rem;
+        }
+
+        .start-btn:hover {
+            transform: translateY(-5px);
+            box-shadow: var(--shadow-hover);
+            background: linear-gradient(to right, var(--secondary-dark), var(--secondary));
+        }
+
+        @keyframes pulse {
+            0% { box-shadow: 0 0 0 0 rgba(255, 101, 132, 0.7); }
+            70% { box-shadow: 0 0 0 15px rgba(255, 101, 132, 0); }
+            100% { box-shadow: 0 0 0 0 rgba(255, 101, 132, 0); }
+        }
+
+        /* قسم المميزات */
+        .features-section {
+            margin-bottom: 50px;
+        }
+
+        .features-section h3 {
+            text-align: center;
+            color: var(--primary);
+            margin-bottom: 30px;
+            font-size: 2rem;
+        }
+
+        .features-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+            gap: 25px;
+        }
+
+        .feature-card {
+            background-color: white;
+            padding: 25px;
+            border-radius: var(--border-radius);
+            box-shadow: var(--shadow);
+            text-align: center;
+            transition: var(--transition);
+        }
+
+        .feature-card:hover {
+            transform: translateY(-10px);
+            box-shadow: var(--shadow-hover);
+        }
+
+        .feature-card i {
+            font-size: 3rem;
+            color: var(--accent);
+            margin-bottom: 20px;
+        }
+
+        .feature-card h4 {
+            color: var(--primary);
+            margin-bottom: 10px;
+            font-size: 1.3rem;
+        }
+
+        .feature-card p {
+            color: var(--gray);
+            line-height: 1.5;
+        }
+
+        /* قسم التعليمات */
+        .instructions-section {
+            background-color: var(--light);
+            padding: 30px;
+            border-radius: var(--border-radius);
+            margin-bottom: 30px;
+        }
+
+        .instructions-section h3 {
+            color: var(--primary);
+            margin-bottom: 20px;
+            text-align: center;
+            font-size: 2rem;
+        }
+
+        .instructions-list {
+            list-style-position: inside;
+            font-size: 1.1rem;
+            line-height: 1.8;
+        }
+
+        .instructions-list li {
+            margin-bottom: 10px;
+            padding-right: 10px;
+        }
+
+        /* التذييل */
+        .footer {
+            text-align: center;
+            padding: 30px;
+            color: var(--gray);
+            border-top: 1px solid var(--light-gray);
+            margin-top: 30px;
+        }
+
+        /* تصميم متجاوب */
+        @media (max-width: 768px) {
+            .container {
+                padding: 10px;
+            }
+            
+            .logo h1 {
+                font-size: 2rem;
+            }
+            
+            .logo h2 {
+                font-size: 1.2rem;
+            }
+            
+            .start-btn {
+                font-size: 1.4rem;
+                padding: 18px 35px;
+            }
+            
+            .features-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .stats {
+                flex-direction: column;
+                align-items: center;
+            }
+            
+            .stat-item {
+                width: 90%;
+                margin-bottom: 15px;
+            }
+        }
+    </style>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body>
+    <div class="container">
+        <!-- شريط اللغات -->
+        <div class="language-switcher">
+            <button id="lang-ar" class="lang-btn active" data-lang="ar">العربية</button>
+            <button id="lang-en" class="lang-btn" data-lang="en">English</button>
+        </div>
+        
+        <!-- الشعار والعنوان -->
+        <header class="header">
+            <div class="logo">
+                <i class="fas fa-gamepad"></i>
+                <h1 data-i18n="gameTitle">لعبة سؤال وجواب</h1>
+                <h2 data-i18n="gameSubtitle">تحدي المعرفة الجماعي</h2>
+            </div>
+        </header>
+        
+        <!-- المحتوى الرئيسي -->
+        <main class="main-content">
+            <div class="welcome-section">
+                <div class="welcome-text">
+                    <h3 data-i18n="welcomeTitle">استعد للتحدي!</h3>
+                    <p data-i18n="welcomeText">لعبة جماعية مثيرة تحتوي على 36 سؤالًا في 6 فئات متنوعة. تنافس مع أصدقائك واختبر معرفتك!</p>
+                </div>
+                
+                <div class="stats">
+                    <div class="stat-item">
+                        <i class="fas fa-layer-group"></i>
+                        <div>
+                            <span class="stat-number" data-i18n="categoriesCount">6</span>
+                            <span data-i18n="categoriesText">فئات</span>
+                        </div>
+                    </div>
+                    <div class="stat-item">
+                        <i class="fas fa-question-circle"></i>
+                        <div>
+                            <span class="stat-number" data-i18n="questionsCount">36</span>
+                            <span data-i18n="questionsText">سؤال</span>
+                        </div>
+                    </div>
+                    <div class="stat-item">
+                        <i class="fas fa-users"></i>
+                        <div>
+                            <span class="stat-number" data-i18n="teamsCount">2-4</span>
+                            <span data-i18n="teamsText">فرق</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- زر البدء -->
+            <div class="start-section">
+                <a href="game.html" class="start-btn" data-i18n="startButton">
+                    <i class="fas fa-play-circle"></i>
+                    ابدأ اللعب الآن
+                </a>
+            </div>
+            
+            <!-- ميزات اللعبة -->
+            <div class="features-section">
+                <h3 data-i18n="featuresTitle">مميزات اللعبة</h3>
+                <div class="features-grid">
+                    <div class="feature-card">
+                        <i class="fas fa-stopwatch"></i>
+                        <h4 data-i18n="feature1Title">مؤقت زمني</h4>
+                        <p data-i18n="feature1Text">كل سؤال له وقت محدد للإجابة</p>
+                    </div>
+                    <div class="feature-card">
+                        <i class="fas fa-trophy"></i>
+                        <h4 data-i18n="feature2Title">نظام نقاط</h4>
+                        <p data-i18n="feature2Text">اربح نقاطًا لكل إجابة صحيحة</p>
+                    </div>
+                    <div class="feature-card">
+                        <i class="fas fa-life-ring"></i>
+                        <h4 data-i18n="feature3Title">وسائل مساعدة</h4>
+                        <p data-i18n="feature3Text">3 وسائل مساعدة لكل فريق</p>
+                    </div>
+                    <div class="feature-card">
+                        <i class="fas fa-globe"></i>
+                        <h4 data-i18n="feature4Title">لغتان</h4>
+                        <p data-i18n="feature4Text">دعم كامل للعربية والإنجليزية</p>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- إرشادات سريعة -->
+            <div class="instructions-section">
+                <h3 data-i18n="quickGuideTitle">كيفية اللعب</h3>
+                <ol class="instructions-list">
+                    <li data-i18n="guideStep1">انقر على "ابدأ اللعب الآن"</li>
+                    <li data-i18n="guideStep2">قم بإنشاء فرق للاعبين</li>
+                    <li data-i18n="guideStep3">اختر فئة الأسئلة</li>
+                    <li data-i18n="guideStep4">أجب على الأسئلة قبل انتهاء الوقت</li>
+                    <li data-i18n="guideStep5">استخدم وسائل المساعدة بحكمة</li>
+                    <li data-i18n="guideStep6">شاهد النتائج النهائية في النهاية</li>
+                </ol>
+            </div>
+        </main>
+        
+        <footer class="footer">
+            <p data-i18n="footerText">لعبة سؤال وجواب - Q&A Game &copy; 2023</p>
+        </footer>
+    </div>
+
+    <script>
+        // JavaScript مباشر في نفس الملف
+        // كائن النصوص متعددة اللغات
+        const translations = {
+            ar: {
+                // الصفحة الرئيسية
+                gameTitle: "لعبة سؤال وجواب",
+                gameSubtitle: "تحدي المعرفة الجماعي",
+                welcomeTitle: "استعد للتحدي!",
+                welcomeText: "لعبة جماعية مثيرة تحتوي على 36 سؤالًا في 6 فئات متنوعة. تنافس مع أصدقائك واختبر معرفتك!",
+                categoriesCount: "6",
+                categoriesText: "فئات",
+                questionsCount: "36",
+                questionsText: "سؤال",
+                teamsCount: "2-4",
+                teamsText: "فرق",
+                startButton: "ابدأ اللعب الآن",
+                featuresTitle: "مميزات اللعبة",
+                feature1Title: "مؤقت زمني",
+                feature1Text: "كل سؤال له وقت محدد للإجابة",
+                feature2Title: "نظام نقاط",
+                feature2Text: "اربح نقاطًا لكل إجابة صحيحة",
+                feature3Title: "وسائل مساعدة",
+                feature3Text: "3 وسائل مساعدة لكل فريق",
+                feature4Title: "لغتان",
+                feature4Text: "دعم كامل للعربية والإنجليزية",
+                quickGuideTitle: "كيفية اللعب",
+                guideStep1: "انقر على 'ابدأ اللعب الآن'",
+                guideStep2: "قم بإنشاء فرق للاعبين",
+                guideStep3: "اختر فئة الأسئلة",
+                guideStep4: "أجب على الأسئلة قبل انتهاء الوقت",
+                guideStep5: "استخدم وسائل المساعدة بحكمة",
+                guideStep6: "شاهد النتائج النهائية في النهاية",
+                footerText: "لعبة سؤال وجواب - Q&A Game © 2023"
+            },
+            en: {
+                // الصفحة الرئيسية
+                gameTitle: "Q&A Game",
+                gameSubtitle: "Collective Knowledge Challenge",
+                welcomeTitle: "Get Ready for the Challenge!",
+                welcomeText: "An exciting group game with 36 questions in 6 diverse categories. Compete with your friends and test your knowledge!",
+                categoriesCount: "6",
+                categoriesText: "Categories",
+                questionsCount: "36",
+                questionsText: "Questions",
+                teamsCount: "2-4",
+                teamsText: "Teams",
+                startButton: "Start Playing Now",
+                featuresTitle: "Game Features",
+                feature1Title: "Timer",
+                feature1Text: "Each question has a time limit",
+                feature2Title: "Points System",
+                feature2Text: "Earn points for each correct answer",
+                feature3Title: "Help Tools",
+                feature3Text: "3 help tools for each team",
+                feature4Title: "Two Languages",
+                feature4Text: "Full support for Arabic and English",
+                quickGuideTitle: "How to Play",
+                guideStep1: "Click on 'Start Playing Now'",
+                guideStep2: "Create teams for players",
+                guideStep3: "Choose question category",
+                guideStep4: "Answer questions before time runs out",
+                guideStep5: "Use help tools wisely",
+                guideStep6: "View final results at the end",
+                footerText: "Q&A Game © 2023"
+            }
+        };
+
+        // الحالة الحالية للغة
+        let currentLang = 'ar';
+
+        // وظيفة تغيير اللغة
+        function changeLanguage(lang) {
+            currentLang = lang;
+            
+            // تغيير اتجاه الصفحة
+            document.documentElement.dir = lang === 'ar' ? 'rtl' : 'ltr';
+            document.documentElement.lang = lang;
+            
+            // تحديث الأزرار النشطة
+            document.querySelectorAll('.lang-btn').forEach(btn => {
+                if (btn.dataset.lang === lang) {
+                    btn.classList.add('active');
+                } else {
+                    btn.classList.remove('active');
+                }
+            });
+            
+            // تحديث جميع النصوص
+            document.querySelectorAll('[data-i18n]').forEach(element => {
+                const key = element.getAttribute('data-i18n');
+                if (translations[lang][key]) {
+                    element.textContent = translations[lang][key];
+                }
+            });
+        }
+
+        // تهيئة الصفحة عند التحميل
+        document.addEventListener('DOMContentLoaded', function() {
+            // إضافة أحداث النقر لأزرار اللغة
+            document.querySelectorAll('.lang-btn').forEach(button => {
+                button.addEventListener('click', function() {
+                    changeLanguage(this.dataset.lang);
+                });
+            });
+            
+            // تعيين اللغة الافتراضية
+            changeLanguage('ar');
+            
+            // تأثيرات إضافية
+            const startBtn = document.querySelector('.start-btn');
+            if (startBtn) {
+                startBtn.addEventListener('mouseenter', function() {
+                    this.style.transform = 'translateY(-5px)';
+                });
+                
+                startBtn.addEventListener('mouseleave', function() {
+                    this.style.transform = 'translateY(0)';
+                });
+            }
+            
+            // تأثيرات على بطاقات الميزات
+            document.querySelectorAll('.feature-card').forEach(card => {
+                card.addEventListener('mouseenter', function() {
+                    this.style.transform = 'translateY(-10px)';
+                });
+                
+                card.addEventListener('mouseleave', function() {
+                    this.style.transform = 'translateY(0)';
+                });
+            });
+            
+            // إنشاء صفحة game.html ديناميكيًا إذا لم تكن موجودة
+            if (!sessionStorage.getItem('gamePageCreated')) {
+                createGamePage();
+                sessionStorage.setItem('gamePageCreated', 'true');
+            }
+        });
+
+        // وظيفة لإنشاء صفحة اللعبة
+        function createGamePage() {
+            const gamePageHTML = `
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>لعبة سؤال وجواب - Q&A Game</title>
+    <style>
+        /* CSS لصفحة اللعبة */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --primary: #6c63ff;
+            --primary-dark: #554fd8;
+            --secondary: #ff6584;
+            --secondary-dark: #e04e6d;
+            --accent: #36d1dc;
+            --accent-dark: #2ab7c0;
+            --light: #f8f9fa;
+            --dark: #212529;
+            --gray: #6c757d;
+            --light-gray: #e9ecef;
+            --success: #28a745;
+            --warning: #ffc107;
+            --danger: #dc3545;
+            --border-radius: 12px;
+            --shadow: 0 8px 20px rgba(0, 0, 0, 0.1);
+            --shadow-hover: 0 12px 25px rgba(0, 0, 0, 0.15);
+            --transition: all 0.3s ease;
+        }
+
+        html[dir="rtl"] {
+            text-align: right;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        html[dir="ltr"] {
+            text-align: left;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        body {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: var(--dark);
+            min-height: 100vh;
+            overflow-x: hidden;
+            padding: 20px;
+            transition: var(--transition);
+            font-family: 'Segoe UI', Tahoma, sans-serif;
+        }
+
+        .game-container {
+            max-width: 1400px;
+            margin: 0 auto;
+            background-color: rgba(255, 255, 255, 0.95);
+            border-radius: var(--border-radius);
+            box-shadow: var(--shadow);
+            overflow: hidden;
+            padding: 20px;
+            min-height: 95vh;
+        }
+
+        .game-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 15px 20px;
+            background: linear-gradient(to right, var(--primary), var(--accent));
+            border-radius: var(--border-radius);
+            color: white;
+            margin-bottom: 20px;
+            flex-wrap: wrap;
+        }
+
+        .game-title {
+            display: flex;
+            align-items: center;
+        }
+
+        .game-title i {
+            font-size: 2rem;
+            margin-left: 15px;
+        }
+
+        .game-title h1 {
+            font-size: 1.8rem;
+        }
+
+        .game-controls {
+            display: flex;
+            align-items: center;
+        }
+
+        .timer-container {
+            background-color: rgba(255, 255, 255, 0.2);
+            padding: 10px 20px;
+            border-radius: 50px;
+            font-size: 1.5rem;
+            font-weight: 700;
+            margin-left: 20px;
+        }
+
+        .timer {
+            color: #ffeb3b;
+        }
+
+        .back-btn {
+            background-color: rgba(255, 255, 255, 0.2);
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 50px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: var(--transition);
+            display: flex;
+            align-items: center;
+            text-decoration: none;
+        }
+
+        .back-btn:hover {
+            background-color: rgba(255, 255, 255, 0.3);
+        }
+
+        .back-btn i {
+            margin-left: 8px;
+        }
+
+        /* قسم الفرق */
+        .teams-section {
+            margin-bottom: 30px;
+        }
+
+        .section-title {
+            color: var(--primary);
+            margin-bottom: 20px;
+            font-size: 1.5rem;
+            display: flex;
+            align-items: center;
+        }
+
+        .section-title i {
+            margin-left: 10px;
+        }
+
+        .teams-container {
+            display: flex;
+            gap: 20px;
+            flex-wrap: wrap;
+            justify-content: center;
+        }
+
+        .team-card {
+            background-color: white;
+            border-radius: var(--border-radius);
+            box-shadow: var(--shadow);
+            padding: 20px;
+            min-width: 250px;
+            flex: 1;
+            transition: var(--transition);
+            border: 3px solid transparent;
+        }
+
+        .team-card.active {
+            border-color: var(--primary);
+            transform: translateY(-5px);
+        }
+
+        .team-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 15px;
+        }
+
+        .team-name {
+            display: flex;
+            align-items: center;
+        }
+
+        .team-color {
+            width: 20px;
+            height: 20px;
+            border-radius: 50%;
+            margin-left: 10px;
+        }
+
+        .team-score {
+            font-size: 2.2rem;
+            font-weight: 700;
+            color: var(--primary);
+        }
+
+        .team-helpers {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 15px;
+        }
+
+        .helper-btn {
+            background-color: var(--light-gray);
+            border: none;
+            padding: 8px 12px;
+            border-radius: 8px;
+            font-size: 0.9rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: var(--transition);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex: 1;
+            margin: 0 5px;
+        }
+
+        .helper-btn i {
+            margin-left: 5px;
+        }
+
+        .helper-btn:hover:not(:disabled) {
+            background-color: var(--accent);
+            color: white;
+        }
+
+        .helper-btn:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+        }
+
+        /* قسم السؤال */
+        .question-section {
+            background-color: white;
+            border-radius: var(--border-radius);
+            box-shadow: var(--shadow);
+            padding: 30px;
+            margin-bottom: 30px;
+            text-align: center;
+        }
+
+        .question-category {
+            display: inline-block;
+            background-color: var(--primary);
+            color: white;
+            padding: 8px 20px;
+            border-radius: 50px;
+            margin-bottom: 20px;
+            font-weight: 600;
+        }
+
+        .question-text {
+            font-size: 1.8rem;
+            line-height: 1.5;
+            margin-bottom: 30px;
+            color: var(--dark);
+        }
+
+        .answers-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 15px;
+            margin-bottom: 20px;
+        }
+
+        .answer-btn {
+            background-color: var(--light-gray);
+            border: none;
+            padding: 20px;
+            border-radius: var(--border-radius);
+            font-size: 1.2rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: var(--transition);
+            text-align: center;
+        }
+
+        .answer-btn:hover:not(:disabled) {
+            background-color: #d1d1d1;
+            transform: translateY(-3px);
+        }
+
+        .answer-btn.correct {
+            background-color: var(--success);
+            color: white;
+        }
+
+        .answer-btn.wrong {
+            background-color: var(--danger);
+            color: white;
+        }
+
+        .answer-btn:disabled {
+            cursor: default;
+        }
+
+        .question-progress {
+            text-align: center;
+            color: var(--gray);
+            font-size: 1.1rem;
+            margin-top: 20px;
+        }
+
+        /* قسم التحكم */
+        .control-section {
+            display: flex;
+            justify-content: center;
+            gap: 20px;
+            margin-top: 30px;
+        }
+
+        .control-btn {
+            background: linear-gradient(to right, var(--primary), var(--primary-dark));
+            color: white;
+            border: none;
+            padding: 15px 30px;
+            border-radius: 50px;
+            font-size: 1.2rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: var(--transition);
+            display: flex;
+            align-items: center;
+        }
+
+        .control-btn i {
+            margin-left: 10px;
+        }
+
+        .control-btn:hover {
+            transform: translateY(-3px);
+            box-shadow: var(--shadow);
+        }
+
+        .control-btn.secondary {
+            background: linear-gradient(to right, var(--accent), var(--accent-dark));
+        }
+
+        /* رسائل اللعبة */
+        .game-message {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            padding: 15px 25px;
+            border-radius: var(--border-radius);
+            color: white;
+            font-weight: 600;
+            box-shadow: var(--shadow);
+            z-index: 1000;
+            animation: slideIn 0.3s ease;
+        }
+
+        .game-message.info {
+            background-color: var(--primary);
+        }
+
+        .game-message.success {
+            background-color: var(--success);
+        }
+
+        .game-message.warning {
+            background-color: var(--warning);
+        }
+
+        @keyframes slideIn {
+            from {
+                transform: translateX(100%);
+                opacity: 0;
+            }
+            to {
+                transform: translateX(0);
+                opacity: 1;
+            }
+        }
+
+        /* تصميم متجاوب للعبة */
+        @media (max-width: 992px) {
+            .answers-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .teams-container {
+                flex-direction: column;
+            }
+            
+            .team-card {
+                min-width: 100%;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .game-header {
+                flex-direction: column;
+                text-align: center;
+                gap: 15px;
+            }
+            
+            .game-controls {
+                width: 100%;
+                justify-content: space-between;
+            }
+            
+            .control-section {
+                flex-direction: column;
+            }
+            
+            .question-text {
+                font-size: 1.4rem;
+            }
+            
+            .answer-btn {
+                padding: 15px;
+                font-size: 1rem;
+            }
+        }
+    </style>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body>
+    <div class="game-container">
+        <!-- شريط اللغات -->
+        <div class="language-switcher">
+            <button id="lang-ar" class="lang-btn active" data-lang="ar">العربية</button>
+            <button id="lang-en" class="lang-btn" data-lang="en">English</button>
+        </div>
+        
+        <!-- رأس اللعبة -->
+        <header class="game-header">
+            <div class="game-title">
+                <i class="fas fa-gamepad"></i>
+                <h1 data-i18n="gamePageTitle">لعبة سؤال وجواب - جاري اللعب</h1>
+            </div>
+            
+            <div class="game-controls">
+                <div class="timer-container">
+                    <span data-i18n="timeLeft">الوقت المتبقي: </span>
+                    <span class="timer" id="timer">30</span>
+                    <span data-i18n="seconds"> ثانية</span>
+                </div>
+                <a href="index.html" class="back-btn">
+                    <i class="fas fa-arrow-right"></i>
+                    <span data-i18n="backToHome">العودة للرئيسية</span>
+                </a>
+            </div>
+        </header>
+        
+        <!-- قسم الفرق -->
+        <div class="teams-section">
+            <h3 class="section-title">
+                <i class="fas fa-users"></i>
+                <span data-i18n="teamsSection">الفرق المشاركة</span>
+            </h3>
+            
+            <div class="teams-container" id="teams-container">
+                <!-- سيتم ملؤها بواسطة JavaScript -->
+            </div>
+        </div>
+        
+        <!-- قسم السؤال -->
+        <div class="question-section">
+            <div class="question-category" id="question-category">
+                <span data-i18n="questionCategory">الفئة: </span>
+                <span id="category-name">العلوم</span>
+            </div>
+            
+            <div class="question-text" id="question-text">
+                ما هو العنصر الأكثر وفرة في الكون؟
+            </div>
+            
+            <div class="answers-grid" id="answers-container">
+                <!-- سيتم ملؤها بواسطة JavaScript -->
+            </div>
+            
+            <div class="question-progress" id="question-progress">
+                <span id="current-question">1</span>
+                <span data-i18n="of"> من </span>
+                <span id="total-questions">6</span>
+            </div>
+        </div>
+        
+        <!-- قسم التحكم -->
+        <div class="control-section">
+            <button class="control-btn" id="next-question-btn" disabled>
+                <span data-i18n="nextQuestion">السؤال التالي</span>
+                <i class="fas fa-arrow-left"></i>
+            </button>
+            
+            <button class="control-btn secondary" id="end-game-btn">
+                <i class="fas fa-flag-checkered"></i>
+                <span data-i18n="endGame">إنهاء اللعبة</span>
+            </button>
+        </div>
+    </div>
+
+    <script>
+        // بيانات اللعبة
+        const gameData = {
+            currentQuestion: 0,
+            totalQuestions: 6,
+            currentCategory: 0,
+            timer: 30,
+            timerInterval: null,
+            teams: [
+                { id: 1, name: "الفريق الأحمر", color: "#ff6584", score: 0, helpers: [true, true, true], isActive: true },
+                { id: 2, name: "الفريق الأزرق", color: "#36d1dc", score: 0, helpers: [true, true, true], isActive: false },
+                { id: 3, name: "الفريق الأخضر", color: "#28a745", score: 0, helpers: [true, true, true], isActive: false },
+                { id: 4, name: "الفريق الأصفر", color: "#ffc107", score: 0, helpers: [true, true, true], isActive: false }
+            ],
+            categories: [
+                { id: 1, name: { ar: "العلوم", en: "Science" }, icon: "fas fa-flask" },
+                { id: 2, name: { ar: "التاريخ", en: "History" }, icon: "fas fa-landmark" },
+                { id: 3, name: { ar: "الجغرافيا", en: "Geography" }, icon: "fas fa-globe-americas" },
+                { id: 4, name: { ar: "الرياضيات", en: "Mathematics" }, icon: "fas fa-calculator" },
+                { id: 5, name: { ar: "الثقافة العامة", en: "General Culture" }, icon: "fas fa-brain" },
+                { id: 6, name: { ar: "الرياضة", en: "Sports" }, icon: "fas fa-futbol" }
+            ],
+            questions: [
+                // العلوم
+                {
+                    id: 1,
+                    category: 1,
+                    text: {
+                        ar: "ما هو العنصر الأكثر وفرة في الكون؟",
+                        en: "What is the most abundant element in the universe?"
+                    },
+                    answers: [
+                        { id: 1, text: { ar: "الهيدروجين", en: "Hydrogen" }, correct: true },
+                        { id: 2, text: { ar: "الأكسجين", en: "Oxygen" }, correct: false },
+                        { id: 3, text: { ar: "الهيليوم", en: "Helium" }, correct: false },
+                        { id: 4, text: { ar: "الكربون", en: "Carbon" }, correct: false }
+                    ]
+                },
+                // التاريخ
+                {
+                    id: 2,
+                    category: 2,
+                    text: {
+                        ar: "في أي عام هبط الإنسان على سطح القمر لأول مرة؟",
+                        en: "In which year did humans first land on the moon?"
+                    },
+                    answers: [
+                        { id: 1, text: { ar: "1965", en: "1965" }, correct: false },
+                        { id: 2, text: { ar: "1969", en: "1969" }, correct: true },
+                        { id: 3, text: { ar: "1972", en: "1972" }, correct: false },
+                        { id: 4, text: { ar: "1958", en: "1958" }, correct: false }
+                    ]
+                },
+                // الجغرافيا
+                {
+                    id: 3,
+                    category: 3,
+                    text: {
+                        ar: "ما هي أكبر دولة في العالم من حيث المساحة؟",
+                        en: "What is the largest country in the world by area?"
+                    },
+                    answers: [
+                        { id: 1, text: { ar: "كندا", en: "Canada" }, correct: false },
+                        { id: 2, text: { ar: "الولايات المتحدة", en: "United States" }, correct: false },
+                        { id: 3, text: { ar: "روسيا", en: "Russia" }, correct: true },
+                        { id: 4, text: { ar: "الصين", en: "China" }, correct: false }
+                    ]
+                },
+                // الرياضيات
+                {
+                    id: 4,
+                    category: 4,
+                    text: {
+                        ar: "ما قيمة الثابت الرياضي π (باي) مقربًا إلى منزلتين عشريتين؟",
+                        en: "What is the value of the mathematical constant π (pi) rounded to two decimal places?"
+                    },
+                    answers: [
+                        { id: 1, text: { ar: "3.14", en: "3.14" }, correct: true },
+                        { id: 2, text: { ar: "3.16", en: "3.16" }, correct: false },
+                        { id: 3, text: { ar: "3.12", en: "3.12" }, correct: false },
+                        { id: 4, text: { ar: "3.18", en: "3.18" }, correct: false }
+                    ]
+                },
+                // الثقافة العامة
+                {
+                    id: 5,
+                    category: 5,
+                    text: {
+                        ar: "من رسم لوحة 'الموناليزا' الشهيرة؟",
+                        en: "Who painted the famous 'Mona Lisa'?"
+                    },
+                    answers: [
+                        { id: 1, text: { ar: "فان جوخ", en: "Van Gogh" }, correct: false },
+                        { id: 2, text: { ar: "ليوناردو دا فينشي", en: "Leonardo da Vinci" }, correct: true },
+                        { id: 3, text: { ar: "بيكاسو", en: "Picasso" }, correct: false },
+                        { id: 4, text: { ar: "مايكل أنجلو", en: "Michelangelo" }, correct: false }
+                    ]
+                },
+                // الرياضة
+                {
+                    id: 6,
+                    category: 6,
+                    text: {
+                        ar: "كم عدد اللاعبين في فريق كرة القدم؟",
+                        en: "How many players are in a soccer team?"
+                    },
+                    answers: [
+                        { id: 1, text: { ar: "10", en: "10" }, correct: false },
+                        { id: 2, text: { ar: "11", en: "11" }, correct: true },
+                        { id: 3, text: { ar: "9", en: "9" }, correct: false },
+                        { id: 4, text: { ar: "12", en: "12" }, correct: false }
+                    ]
+                }
+            ],
+            activeTeams: 2
+        };
+
+        // تهيئة اللعبة
+        function initGame() {
+            // إنشاء الفرق الافتراضية
+            createTeams();
+            
+            // تحميل السؤال الأول
+            loadQuestion();
+            
+            // بدء المؤقت
+            startTimer();
+            
+            // تحديث عرض النقاط
+            updateScores();
+        }
+
+        // إنشاء الفرق
+        function createTeams() {
+            const teamsContainer = document.getElementById('teams-container');
+            if (!teamsContainer) return;
+            
+            teamsContainer.innerHTML = '';
+            
+            for (let i = 0; i < gameData.activeTeams; i++) {
+                const team = gameData.teams[i];
+                const teamHTML = \`
+                    <div class="team-card \${team.isActive ? 'active' : ''}" data-team-id="\${team.id}">
+                        <div class="team-header">
+                            <div class="team-name">
+                                <span class="team-name-text">\${team.name}</span>
+                                <div class="team-color" style="background-color: \${team.color};"></div>
+                            </div>
+                            <div class="team-score" id="score-team-\${team.id}">\${team.score}</div>
+                        </div>
+                        
+                        <div class="team-helpers">
+                            <button class="helper-btn" data-helper="0" data-team-id="\${team.id}" \${!team.helpers[0] ? 'disabled' : ''}>
+                                <i class="fas fa-times-circle"></i>
+                                <span data-i18n="helper1">حذف خيارين</span>
+                            </button>
+                            <button class="helper-btn" data-helper="1" data-team-id="\${team.id}" \${!team.helpers[1] ? 'disabled' : ''}>
+                                <i class="fas fa-sync-alt"></i>
+                                <span data-i18n="helper2">تغيير السؤال</span>
+                            </button>
+                            <button class="helper-btn" data-helper="2" data-team-id="\${team.id}" \${!team.helpers[2] ? 'disabled' : ''}>
+                                <i class="fas fa-bolt"></i>
+                                <span data-i18n="helper3">مضاعفة النقاط</span>
+                            </button>
+                        </div>
+                    </div>
+                \`;
+                
+                teamsContainer.innerHTML += teamHTML;
+            }
+            
+            // إضافة أحداث النقر لأزرار المساعدة
+            document.querySelectorAll('.helper-btn').forEach(btn => {
+                btn.addEventListener('click', function() {
+                    const teamId = parseInt(this.dataset.teamId);
+                    const helperIndex = parseInt(this.dataset.helper);
+                    useHelper(teamId, helperIndex);
+                });
+            });
+        }
+
+        // تحميل السؤال
+        function loadQuestion() {
+            const question = gameData.questions[gameData.currentQuestion];
+            const currentLang = document.documentElement.lang || 'ar';
+            
+            // تحديث الفئة
+            const categoryElement = document.getElementById('category-name');
+            if (categoryElement) {
+                const category = gameData.categories.find(c => c.id === question.category);
+                categoryElement.textContent = category.name[currentLang];
+            }
+            
+            // تحديث نص السؤال
+            const questionElement = document.getElementById('question-text');
+            if (questionElement) {
+                questionElement.textContent = question.text[currentLang];
+            }
+            
+            // تحديث الإجابات
+            const answersContainer = document.getElementById('answers-container');
+            if (answersContainer) {
+                answersContainer.innerHTML = '';
+                
+                question.answers.forEach(answer => {
+                    const answerHTML = \`
+                        <button class="answer-btn" data-answer-id="\${answer.id}">
+                            \${answer.text[currentLang]}
+                        </button>
+                    \`;
+                    answersContainer.innerHTML += answerHTML;
+                });
+                
+                // إضافة أحداث النقر للإجابات
+                document.querySelectorAll('.answer-btn').forEach(btn => {
+                    btn.addEventListener('click', function() {
+                        const answerId = parseInt(this.dataset.answerId);
+                        checkAnswer(answerId);
+                    });
+                });
+            }
+            
+            // تحديث تقدم الأسئلة
+            const progressElement = document.getElementById('current-question');
+            if (progressElement) {
+                progressElement.textContent = gameData.currentQuestion + 1;
+            }
+            
+            // إعادة تعيين المؤقت
+            resetTimer();
+        }
+
+        // التحقق من الإجابة
+        function checkAnswer(answerId) {
+            const question = gameData.questions[gameData.currentQuestion];
+            const selectedAnswer = question.answers.find(a => a.id === answerId);
+            const answerButtons = document.querySelectorAll('.answer-btn');
+            
+            // تعطيل جميع الأزرار بعد الإجابة
+            answerButtons.forEach(btn => {
+                btn.disabled = true;
+            });
+            
+            // عرض الإجابة الصحيحة والخاطئة
+            answerButtons.forEach(btn => {
+                const btnAnswerId = parseInt(btn.dataset.answerId);
+                const answer = question.answers.find(a => a.id === btnAnswerId);
+                
+                if (answer.correct) {
+                    btn.classList.add('correct');
+                } else if (btnAnswerId === answerId && !selectedAnswer.correct) {
+                    btn.classList.add('wrong');
+                }
+            });
+            
+            // إضافة النقاط إذا كانت الإجابة صحيحة
+            if (selectedAnswer.correct) {
+                const activeTeam = gameData.teams.find(team => team.isActive);
+                if (activeTeam) {
+                    // مضاعفة النقاط إذا تم استخدام وسيلة المساعدة الثالثة
+                    const pointsMultiplier = activeTeam.helpers[2] === false ? 2 : 1;
+                    activeTeam.score += 10 * pointsMultiplier;
+                    updateScores();
+                    
+                    // عرض رسالة بالمضاعفة إذا كانت مفعلة
+                    if (pointsMultiplier === 2) {
+                        showMessage("سيتم مضاعفة نقاط هذا السؤال", 'success');
+                    }
+                }
+            }
+            
+            // إيقاف المؤقت
+            clearInterval(gameData.timerInterval);
+            
+            // تمكين زر السؤال التالي
+            const nextQuestionBtn = document.getElementById('next-question-btn');
+            if (nextQuestionBtn) {
+                nextQuestionBtn.disabled = false;
+            }
+        }
+
+        // استخدام وسيلة المساعدة
+        function useHelper(teamId, helperIndex) {
+            const team = gameData.teams.find(t => t.id === teamId);
+            
+            // التحقق إذا كانت وسيلة المساعدة متوفرة
+            if (!team.helpers[helperIndex]) {
+                showMessage("لا توجد وسائل مساعدة متبقية", 'warning');
+                return;
+            }
+            
+            // تحديث حالة وسيلة المساعدة
+            team.helpers[helperIndex] = false;
+            
+            // تحديث واجهة المستخدم
+            const helperBtn = document.querySelector(\`.helper-btn[data-team-id="\${teamId}"][data-helper="\${helperIndex}"]\`);
+            if (helperBtn) {
+                helperBtn.disabled = true;
+            }
+            
+            // تنفيذ تأثير وسيلة المساعدة
+            switch(helperIndex) {
+                case 0: // حذف خيارين
+                    removeTwoOptions();
+                    showMessage("تم حذف خيارين غير صحيحين", 'info');
+                    break;
+                case 1: // تغيير السؤال
+                    changeQuestion();
+                    showMessage("تم تغيير السؤال", 'info');
+                    break;
+                case 2: // مضاعفة النقاط
+                    showMessage("سيتم مضاعفة نقاط هذا السؤال", 'success');
+                    break;
+            }
+        }
+
+        // حذف خيارين غير صحيحين
+        function removeTwoOptions() {
+            const question = gameData.questions[gameData.currentQuestion];
+            const incorrectAnswers = question.answers.filter(a => !a.correct);
+            
+            // اختيار خيارين غير صحيحين عشوائيًا
+            const toRemove = [];
+            while (toRemove.length < 2 && incorrectAnswers.length > 0) {
+                const randomIndex = Math.floor(Math.random() * incorrectAnswers.length);
+                toRemove.push(incorrectAnswers[randomIndex].id);
+                incorrectAnswers.splice(randomIndex, 1);
+            }
+            
+            // إخفاء الخيارات المحددة
+            toRemove.forEach(answerId => {
+                const answerBtn = document.querySelector(\`.answer-btn[data-answer-id="\${answerId}"]\`);
+                if (answerBtn) {
+                    answerBtn.style.display = 'none';
+                }
+            });
+        }
+
+        // تغيير السؤال
+        function changeQuestion() {
+            // الحصول على سؤال مختلف من نفس الفئة
+            const currentCategory = gameData.questions[gameData.currentQuestion].category;
+            const sameCategoryQuestions = gameData.questions.filter(q => q.category === currentCategory);
+            
+            // اختيار سؤال عشوائي من نفس الفئة (ليس السؤال الحالي)
+            let newQuestionIndex;
+            do {
+                newQuestionIndex = Math.floor(Math.random() * gameData.questions.length);
+            } while (newQuestionIndex === gameData.currentQuestion || gameData.questions[newQuestionIndex].category !== currentCategory);
+            
+            gameData.currentQuestion = newQuestionIndex;
+            loadQuestion();
+            resetTimer();
+        }
+
+        // بدء المؤقت
+        function startTimer() {
+            const timerElement = document.getElementById('timer');
+            if (!timerElement) return;
+            
+            gameData.timer = 30;
+            timerElement.textContent = \`\${gameData.timer}\`;
+            
+            gameData.timerInterval = setInterval(() => {
+                gameData.timer--;
+                timerElement.textContent = \`\${gameData.timer}\`;
+                
+                // تغيير لون المؤقت عندما يكون الوقت منخفضًا
+                if (gameData.timer <= 10) {
+                    timerElement.style.color = '#ff4444';
+                }
+                
+                // انتهاء الوقت
+                if (gameData.timer <= 0) {
+                    clearInterval(gameData.timerInterval);
+                    
+                    // تعطيل جميع أزرار الإجابة
+                    document.querySelectorAll('.answer-btn').forEach(btn => {
+                        btn.disabled = true;
+                    });
+                    
+                    // عرض الإجابة الصحيحة
+                    const question = gameData.questions[gameData.currentQuestion];
+                    const correctAnswer = question.answers.find(a => a.correct);
+                    
+                    if (correctAnswer) {
+                        const correctBtn = document.querySelector(\`.answer-btn[data-answer-id="\${correctAnswer.id}"]\`);
+                        if (correctBtn) {
+                            correctBtn.classList.add('correct');
+                        }
+                    }
+                    
+                    // تمكين زر السؤال التالي
+                    const nextQuestionBtn = document.getElementById('next-question-btn');
+                    if (nextQuestionBtn) {
+                        nextQuestionBtn.disabled = false;
+                    }
+                }
+            }, 1000);
+        }
+
+        // إعادة تعيين المؤقت
+        function resetTimer() {
+            clearInterval(gameData.timerInterval);
+            
+            const timerElement = document.getElementById('timer');
+            if (timerElement) {
+                timerElement.style.color = '#ffeb3b';
+            }
+            
+            startTimer();
+        }
+
+        // تحديث النقاط
+        function updateScores() {
+            gameData.teams.forEach(team => {
+                const scoreElement = document.getElementById(\`score-team-\${team.id}\`);
+                if (scoreElement) {
+                    scoreElement.textContent = team.score;
+                }
+            });
+        }
+
+        // عرض رسالة
+        function showMessage(text, type) {
+            // إنشاء عنصر الرسالة
+            const messageDiv = document.createElement('div');
+            messageDiv.className = \`game-message \${type}\`;
+            messageDiv.textContent = text;
+            
+            // إضافة الرسالة إلى الصفحة
+            const container = document.querySelector('.game-container');
+            if (container) {
+                container.appendChild(messageDiv);
+            }
+            
+            // إزالة الرسالة بعد 3 ثوانٍ
+            setTimeout(() => {
+                messageDiv.remove();
+            }, 3000);
+        }
+
+        // الانتقال إلى السؤال التالي
+        function nextQuestion() {
+            gameData.currentQuestion++;
+            
+            // تغيير الفريق النشط
+            const currentActiveIndex = gameData.teams.findIndex(team => team.isActive);
+            gameData.teams[currentActiveIndex].isActive = false;
+            
+            const nextActiveIndex = (currentActiveIndex + 1) % gameData.activeTeams;
+            gameData.teams[nextActiveIndex].isActive = true;
+            
+            // تحديث واجهة الفرق
+            createTeams();
+            
+            // التحقق إذا انتهت الأسئلة
+            if (gameData.currentQuestion >= gameData.totalQuestions) {
+                // حفظ النتائج والانتقال إلى صفحة النتائج
+                localStorage.setItem('gameResults', JSON.stringify(gameData.teams));
+                window.location.href = 'results.html';
+                return;
+            }
+            
+            // تحميل السؤال التالي
+            loadQuestion();
+            
+            // تعطيل زر السؤال التالي مؤقتًا
+            const nextQuestionBtn = document.getElementById('next-question-btn');
+            if (nextQuestionBtn) {
+                nextQuestionBtn.disabled = true;
+            }
+        }
+
+        // إنهاء اللعبة
+        function endGame() {
+            // حفظ النتائج في التخزين المحلي
+            localStorage.setItem('gameResults', JSON.stringify(gameData.teams));
+            
+            // الانتقال إلى صفحة النتائج
+            window.location.href = 'results.html';
+        }
+
+        // تهيئة الصفحة عند التحميل
+        document.addEventListener('DOMContentLoaded', function() {
+            // تحميل النصوص متعددة اللغات
+            const gameTranslations = {
+                ar: {
+                    gamePageTitle: "لعبة سؤال وجواب - جاري اللعب",
+                    backToHome: "العودة للرئيسية",
+                    teamsSection: "الفرق المشاركة",
+                    questionCategory: "الفئة: ",
+                    nextQuestion: "السؤال التالي",
+                    endGame: "إنهاء اللعبة",
+                    helper1: "حذف خيارين",
+                    helper2: "تغيير السؤال",
+                    helper3: "مضاعفة النقاط",
+                    timeLeft: "الوقت المتبقي: ",
+                    seconds: " ثانية",
+                    of: " من "
+                },
+                en: {
+                    gamePageTitle: "Q&A Game - Playing",
+                    backToHome: "Back to Home",
+                    teamsSection: "Participating Teams",
+                    questionCategory: "Category: ",
+                    nextQuestion: "Next Question",
+                    endGame: "End Game",
+                    helper1: "Remove Two Options",
+                    helper2: "Change Question",
+                    helper3: "Double Points",
+                    timeLeft: "Time Left: ",
+                    seconds: " seconds",
+                    of: " of "
+                }
+            };
+
+            // وظيفة تغيير اللغة للعبة
+            function changeGameLanguage(lang) {
+                document.documentElement.dir = lang === 'ar' ? 'rtl' : 'ltr';
+                document.documentElement.lang = lang;
+                
+                // تحديث الأزرار النشطة
+                document.querySelectorAll('.lang-btn').forEach(btn => {
+                    if (btn.dataset.lang === lang) {
+                        btn.classList.add('active');
+                    } else {
+                        btn.classList.remove('active');
+                    }
+                });
+                
+                // تحديث جميع النصوص
+                document.querySelectorAll('[data-i18n]').forEach(element => {
+                    const key = element.getAttribute('data-i18n');
+                    if (gameTranslations[lang][key]) {
+                        element.textContent = gameTranslations[lang][key];
+                    }
+                });
+                
+                // إعادة تحميل السؤال مع اللغة الجديدة
+                if (typeof loadQuestion === 'function') {
+                    loadQuestion();
+                }
+            }
+
+            // إضافة أحداث النقر لأزرار اللغة
+            document.querySelectorAll('.lang-btn').forEach(button => {
+                button.addEventListener('click', function() {
+                    changeGameLanguage(this.dataset.lang);
+                });
+            });
+
+            // تهيئة اللعبة
+            initGame();
+            
+            // إضافة أحداث النقر للأزرار
+            const nextQuestionBtn = document.getElementById('next-question-btn');
+            if (nextQuestionBtn) {
+                nextQuestionBtn.addEventListener('click', nextQuestion);
+                nextQuestionBtn.disabled = true;
+            }
+            
+            const endGameBtn = document.getElementById('end-game-btn');
+            if (endGameBtn) {
+                endGameBtn.addEventListener('click', endGame);
+            }
+        });
+    </script>
+</body>
+</html>
+            `;
+            
+            // حفظ صفحة اللعبة في التخزين المحلي
+            localStorage.setItem('gamePageHTML', gamePageHTML);
+        }
+    </script>
+</body>
+</html>
