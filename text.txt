@@ -1,0 +1,20 @@
+
+## التخصيص والتطوير
+
+### إضافة أسئلة جديدة
+يمكن إضافة أسئلة جديدة في ملف `js/game.js` داخل مصفوفة `gameData.questions`:
+
+```javascript
+{
+    id: 7, // رقم فريد
+    category: 1, // رقم الفئة
+    text: {
+        ar: "السؤال بالعربية",
+        en: "Question in English"
+    },
+    answers: [
+        { id: 1, text: { ar: "الإجابة 1 عربي", en: "Answer 1 English" }, correct: false },
+        { id: 2, text: { ar: "الإجابة 2 عربي", en: "Answer 2 English" }, correct: true },
+        // ... المزيد من الإجابات
+    ]
+}

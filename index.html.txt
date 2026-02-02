@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>لعبة سؤال وجواب - Q&A Game</title>
+    <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700;900&display=swap" rel="stylesheet">
+</head>
+<body>
+    <div class="container">
+        <!-- شريط اللغات -->
+        <div class="language-switcher">
+            <button id="lang-ar" class="lang-btn active" data-lang="ar">العربية</button>
+            <button id="lang-en" class="lang-btn" data-lang="en">English</button>
+        </div>
+        
+        <!-- الشعار والعنوان -->
+        <header class="header">
+            <div class="logo">
+                <i class="fas fa-gamepad"></i>
+                <h1 data-i18n="gameTitle">لعبة سؤال وجواب</h1>
+                <h2 data-i18n="gameSubtitle">تحدي المعرفة الجماعي</h2>
+            </div>
+        </header>
+        
+        <!-- المحتوى الرئيسي -->
+        <main class="main-content">
+            <div class="welcome-section">
+                <div class="welcome-text">
+                    <h3 data-i18n="welcomeTitle">استعد للتحدي!</h3>
+                    <p data-i18n="welcomeText">لعبة جماعية مثيرة تحتوي على 36 سؤالًا في 6 فئات متنوعة. تنافس مع أصدقائك واختبر معرفتك!</p>
+                </div>
+                
+                <div class="stats">
+                    <div class="stat-item">
+                        <i class="fas fa-layer-group"></i>
+                        <div>
+                            <span class="stat-number" data-i18n="categoriesCount">6</span>
+                            <span data-i18n="categoriesText">فئات</span>
+                        </div>
+                    </div>
+                    <div class="stat-item">
+                        <i class="fas fa-question-circle"></i>
+                        <div>
+                            <span class="stat-number" data-i18n="questionsCount">36</span>
+                            <span data-i18n="questionsText">سؤال</span>
+                        </div>
+                    </div>
+                    <div class="stat-item">
+                        <i class="fas fa-users"></i>
+                        <div>
+                            <span class="stat-number" data-i18n="teamsCount">2-4</span>
+                            <span data-i18n="teamsText">فرق</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- زر البدء -->
+            <div class="start-section">
+                <a href="game.html" class="start-btn" data-i18n="startButton">
+                    <i class="fas fa-play-circle"></i>
+                    ابدأ اللعب الآن
+                </a>
+            </div>
+            
+            <!-- ميزات اللعبة -->
+            <div class="features-section">
+                <h3 data-i18n="featuresTitle">مميزات اللعبة</h3>
+                <div class="features-grid">
+                    <div class="feature-card">
+                        <i class="fas fa-stopwatch"></i>
+                        <h4 data-i18n="feature1Title">مؤقت زمني</h4>
+                        <p data-i18n="feature1Text">كل سؤال له وقت محدد للإجابة</p>
+                    </div>
+                    <div class="feature-card">
+                        <i class="fas fa-trophy"></i>
+                        <h4 data-i18n="feature2Title">نظام نقاط</h4>
+                        <p data-i18n="feature2Text">اربح نقاطًا لكل إجابة صحيحة</p>
+                    </div>
+                    <div class="feature-card">
+                        <i class="fas fa-life-ring"></i>
+                        <h4 data-i18n="feature3Title">وسائل مساعدة</h4>
+                        <p data-i18n="feature3Text">3 وسائل مساعدة لكل فريق</p>
+                    </div>
+                    <div class="feature-card">
+                        <i class="fas fa-globe"></i>
+                        <h4 data-i18n="feature4Title">لغتان</h4>
+                        <p data-i18n="feature4Text">دعم كامل للعربية والإنجليزية</p>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- إرشادات سريعة -->
+            <div class="instructions-section">
+                <h3 data-i18n="quickGuideTitle">كيفية اللعب</h3>
+                <ol class="instructions-list">
+                    <li data-i18n="guideStep1">انقر على "ابدأ اللعب الآن"</li>
+                    <li data-i18n="guideStep2">قم بإنشاء فرق للاعبين</li>
+                    <li data-i18n="guideStep3">اختر فئة الأسئلة</li>
+                    <li data-i18n="guideStep4">أجب على الأسئلة قبل انتهاء الوقت</li>
+                    <li data-i18n="guideStep5">استخدم وسائل المساعدة بحكمة</li>
+                    <li data-i18n="guideStep6">شاهد النتائج النهائية في النهاية</li>
+                </ol>
+            </div>
+        </main>
+        
+        <footer class="footer">
+            <p data-i18n="footerText">لعبة سؤال وجواب - Q&A Game &copy; 2023</p>
+        </footer>
+    </div>
+
+    <script src="js/script.js"></script>
+</body>
+</html>

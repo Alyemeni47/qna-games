@@ -1,0 +1,325 @@
+/* أنماط خاصة بصفحة اللعبة */
+.game-container {
+    max-width: 1400px;
+    margin: 0 auto;
+    background-color: rgba(255, 255, 255, 0.95);
+    border-radius: var(--border-radius);
+    box-shadow: var(--shadow);
+    overflow: hidden;
+    padding: 20px;
+    min-height: 95vh;
+}
+
+.game-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 15px 20px;
+    background: linear-gradient(to right, var(--primary), var(--accent));
+    border-radius: var(--border-radius);
+    color: white;
+    margin-bottom: 20px;
+    flex-wrap: wrap;
+}
+
+.game-title {
+    display: flex;
+    align-items: center;
+}
+
+.game-title i {
+    font-size: 2rem;
+    margin-left: 15px;
+}
+
+.game-title h1 {
+    font-size: 1.8rem;
+}
+
+.game-controls {
+    display: flex;
+    align-items: center;
+}
+
+.timer-container {
+    background-color: rgba(255, 255, 255, 0.2);
+    padding: 10px 20px;
+    border-radius: 50px;
+    font-size: 1.5rem;
+    font-weight: 700;
+    margin-left: 20px;
+}
+
+.timer {
+    color: #ffeb3b;
+}
+
+.back-btn {
+    background-color: rgba(255, 255, 255, 0.2);
+    color: white;
+    border: none;
+    padding: 10px 20px;
+    border-radius: 50px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: var(--transition);
+    display: flex;
+    align-items: center;
+}
+
+.back-btn:hover {
+    background-color: rgba(255, 255, 255, 0.3);
+}
+
+.back-btn i {
+    margin-left: 8px;
+}
+
+/* قسم الفرق */
+.teams-section {
+    margin-bottom: 30px;
+}
+
+.section-title {
+    color: var(--primary);
+    margin-bottom: 20px;
+    font-size: 1.5rem;
+    display: flex;
+    align-items: center;
+}
+
+.section-title i {
+    margin-left: 10px;
+}
+
+.teams-container {
+    display: flex;
+    gap: 20px;
+    flex-wrap: wrap;
+    justify-content: center;
+}
+
+.team-card {
+    background-color: white;
+    border-radius: var(--border-radius);
+    box-shadow: var(--shadow);
+    padding: 20px;
+    min-width: 250px;
+    flex: 1;
+    transition: var(--transition);
+    border: 3px solid transparent;
+}
+
+.team-card.active {
+    border-color: var(--primary);
+    transform: translateY(-5px);
+}
+
+.team-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 15px;
+}
+
+.team-name {
+    display: flex;
+    align-items: center;
+}
+
+.team-color {
+    width: 20px;
+    height: 20px;
+    border-radius: 50%;
+    margin-left: 10px;
+}
+
+.team-score {
+    font-size: 2.2rem;
+    font-weight: 700;
+    color: var(--primary);
+}
+
+.team-helpers {
+    display: flex;
+    justify-content: space-between;
+    margin-top: 15px;
+}
+
+.helper-btn {
+    background-color: var(--light-gray);
+    border: none;
+    padding: 8px 12px;
+    border-radius: 8px;
+    font-size: 0.9rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: var(--transition);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex: 1;
+    margin: 0 5px;
+}
+
+.helper-btn i {
+    margin-left: 5px;
+}
+
+.helper-btn:hover:not(:disabled) {
+    background-color: var(--accent);
+    color: white;
+}
+
+.helper-btn:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+}
+
+/* قسم السؤال */
+.question-section {
+    background-color: white;
+    border-radius: var(--border-radius);
+    box-shadow: var(--shadow);
+    padding: 30px;
+    margin-bottom: 30px;
+    text-align: center;
+}
+
+.question-category {
+    display: inline-block;
+    background-color: var(--primary);
+    color: white;
+    padding: 8px 20px;
+    border-radius: 50px;
+    margin-bottom: 20px;
+    font-weight: 600;
+}
+
+.question-text {
+    font-size: 1.8rem;
+    line-height: 1.5;
+    margin-bottom: 30px;
+    color: var(--dark);
+}
+
+.answers-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 15px;
+    margin-bottom: 20px;
+}
+
+.answer-btn {
+    background-color: var(--light-gray);
+    border: none;
+    padding: 20px;
+    border-radius: var(--border-radius);
+    font-size: 1.2rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: var(--transition);
+    text-align: center;
+}
+
+.answer-btn:hover:not(:disabled) {
+    background-color: #d1d1d1;
+    transform: translateY(-3px);
+}
+
+.answer-btn.correct {
+    background-color: var(--success);
+    color: white;
+}
+
+.answer-btn.wrong {
+    background-color: var(--danger);
+    color: white;
+}
+
+.answer-btn:disabled {
+    cursor: default;
+}
+
+.question-progress {
+    text-align: center;
+    color: var(--gray);
+    font-size: 1.1rem;
+    margin-top: 20px;
+}
+
+/* قسم التحكم */
+.control-section {
+    display: flex;
+    justify-content: center;
+    gap: 20px;
+    margin-top: 30px;
+}
+
+.control-btn {
+    background: linear-gradient(to right, var(--primary), var(--primary-dark));
+    color: white;
+    border: none;
+    padding: 15px 30px;
+    border-radius: 50px;
+    font-size: 1.2rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: var(--transition);
+    display: flex;
+    align-items: center;
+}
+
+.control-btn i {
+    margin-left: 10px;
+}
+
+.control-btn:hover {
+    transform: translateY(-3px);
+    box-shadow: var(--shadow);
+}
+
+.control-btn.secondary {
+    background: linear-gradient(to right, var(--accent), var(--accent-dark));
+}
+
+/* تصميم متجاوب للعبة */
+@media (max-width: 992px) {
+    .answers-grid {
+        grid-template-columns: 1fr;
+    }
+    
+    .teams-container {
+        flex-direction: column;
+    }
+    
+    .team-card {
+        min-width: 100%;
+    }
+}
+
+@media (max-width: 768px) {
+    .game-header {
+        flex-direction: column;
+        text-align: center;
+        gap: 15px;
+    }
+    
+    .game-controls {
+        width: 100%;
+        justify-content: space-between;
+    }
+    
+    .control-section {
+        flex-direction: column;
+    }
+    
+    .question-text {
+        font-size: 1.4rem;
+    }
+    
+    .answer-btn {
+        padding: 15px;
+        font-size: 1rem;
+    }
+}

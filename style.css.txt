@@ -1,0 +1,320 @@
+/* إعادة تعيين وإعدادات عامة */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+:root {
+    --primary: #6c63ff;
+    --primary-dark: #554fd8;
+    --secondary: #ff6584;
+    --secondary-dark: #e04e6d;
+    --accent: #36d1dc;
+    --accent-dark: #2ab7c0;
+    --light: #f8f9fa;
+    --dark: #212529;
+    --gray: #6c757d;
+    --light-gray: #e9ecef;
+    --success: #28a745;
+    --warning: #ffc107;
+    --danger: #dc3545;
+    --border-radius: 12px;
+    --shadow: 0 8px 20px rgba(0, 0, 0, 0.1);
+    --shadow-hover: 0 12px 25px rgba(0, 0, 0, 0.15);
+    --transition: all 0.3s ease;
+}
+
+html[dir="rtl"] {
+    text-align: right;
+    font-family: 'Cairo', sans-serif;
+}
+
+html[dir="ltr"] {
+    text-align: left;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+
+body {
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    color: var(--dark);
+    min-height: 100vh;
+    overflow-x: hidden;
+    padding: 20px;
+    transition: var(--transition);
+}
+
+.container {
+    max-width: 1200px;
+    margin: 0 auto;
+    background-color: rgba(255, 255, 255, 0.95);
+    border-radius: var(--border-radius);
+    box-shadow: var(--shadow);
+    overflow: hidden;
+    padding: 20px;
+}
+
+/* شريط تبديل اللغة */
+.language-switcher {
+    display: flex;
+    justify-content: flex-end;
+    margin-bottom: 20px;
+}
+
+.lang-btn {
+    background-color: var(--light-gray);
+    border: none;
+    padding: 8px 16px;
+    border-radius: 20px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: var(--transition);
+    margin: 0 5px;
+}
+
+.lang-btn.active {
+    background-color: var(--primary);
+    color: white;
+}
+
+.lang-btn:hover:not(.active) {
+    background-color: #d1d1d1;
+}
+
+/* رأس الصفحة */
+.header {
+    text-align: center;
+    padding: 30px 20px;
+    background: linear-gradient(to right, var(--primary), var(--accent));
+    border-radius: var(--border-radius);
+    color: white;
+    margin-bottom: 30px;
+}
+
+.logo i {
+    font-size: 4rem;
+    margin-bottom: 15px;
+}
+
+.logo h1 {
+    font-size: 3rem;
+    margin-bottom: 10px;
+}
+
+.logo h2 {
+    font-size: 1.5rem;
+    font-weight: 400;
+}
+
+/* المحتوى الرئيسي */
+.main-content {
+    padding: 0 20px;
+}
+
+.welcome-section {
+    background-color: var(--light);
+    padding: 30px;
+    border-radius: var(--border-radius);
+    margin-bottom: 30px;
+    text-align: center;
+}
+
+.welcome-text h3 {
+    color: var(--primary);
+    margin-bottom: 15px;
+    font-size: 2rem;
+}
+
+.welcome-text p {
+    color: var(--gray);
+    font-size: 1.2rem;
+    line-height: 1.6;
+}
+
+.stats {
+    display: flex;
+    justify-content: space-around;
+    margin-top: 40px;
+    flex-wrap: wrap;
+}
+
+.stat-item {
+    display: flex;
+    align-items: center;
+    background: white;
+    padding: 20px;
+    border-radius: var(--border-radius);
+    box-shadow: var(--shadow);
+    min-width: 180px;
+    margin: 10px;
+}
+
+.stat-item i {
+    font-size: 2.5rem;
+    color: var(--primary);
+    margin-left: 15px;
+}
+
+.stat-number {
+    display: block;
+    font-size: 2.2rem;
+    font-weight: 700;
+    color: var(--primary);
+}
+
+/* زر البدء */
+.start-section {
+    text-align: center;
+    margin: 50px 0;
+}
+
+.start-btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    background: linear-gradient(to right, var(--secondary), var(--secondary-dark));
+    color: white;
+    text-decoration: none;
+    padding: 22px 50px;
+    border-radius: 50px;
+    font-size: 1.8rem;
+    font-weight: 700;
+    box-shadow: var(--shadow);
+    transition: var(--transition);
+    animation: pulse 2s infinite;
+}
+
+.start-btn i {
+    margin-left: 15px;
+    font-size: 2rem;
+}
+
+.start-btn:hover {
+    transform: translateY(-5px);
+    box-shadow: var(--shadow-hover);
+    background: linear-gradient(to right, var(--secondary-dark), var(--secondary));
+}
+
+@keyframes pulse {
+    0% { box-shadow: 0 0 0 0 rgba(255, 101, 132, 0.7); }
+    70% { box-shadow: 0 0 0 15px rgba(255, 101, 132, 0); }
+    100% { box-shadow: 0 0 0 0 rgba(255, 101, 132, 0); }
+}
+
+/* قسم المميزات */
+.features-section {
+    margin-bottom: 50px;
+}
+
+.features-section h3 {
+    text-align: center;
+    color: var(--primary);
+    margin-bottom: 30px;
+    font-size: 2rem;
+}
+
+.features-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+    gap: 25px;
+}
+
+.feature-card {
+    background-color: white;
+    padding: 25px;
+    border-radius: var(--border-radius);
+    box-shadow: var(--shadow);
+    text-align: center;
+    transition: var(--transition);
+}
+
+.feature-card:hover {
+    transform: translateY(-10px);
+    box-shadow: var(--shadow-hover);
+}
+
+.feature-card i {
+    font-size: 3rem;
+    color: var(--accent);
+    margin-bottom: 20px;
+}
+
+.feature-card h4 {
+    color: var(--primary);
+    margin-bottom: 10px;
+    font-size: 1.3rem;
+}
+
+.feature-card p {
+    color: var(--gray);
+    line-height: 1.5;
+}
+
+/* قسم التعليمات */
+.instructions-section {
+    background-color: var(--light);
+    padding: 30px;
+    border-radius: var(--border-radius);
+    margin-bottom: 30px;
+}
+
+.instructions-section h3 {
+    color: var(--primary);
+    margin-bottom: 20px;
+    text-align: center;
+    font-size: 2rem;
+}
+
+.instructions-list {
+    list-style-position: inside;
+    font-size: 1.1rem;
+    line-height: 1.8;
+}
+
+.instructions-list li {
+    margin-bottom: 10px;
+    padding-right: 10px;
+}
+
+/* التذييل */
+.footer {
+    text-align: center;
+    padding: 30px;
+    color: var(--gray);
+    border-top: 1px solid var(--light-gray);
+    margin-top: 30px;
+}
+
+/* تصميم متجاوب */
+@media (max-width: 768px) {
+    .container {
+        padding: 10px;
+    }
+    
+    .logo h1 {
+        font-size: 2.2rem;
+    }
+    
+    .logo h2 {
+        font-size: 1.2rem;
+    }
+    
+    .start-btn {
+        font-size: 1.4rem;
+        padding: 18px 35px;
+    }
+    
+    .features-grid {
+        grid-template-columns: 1fr;
+    }
+    
+    .stats {
+        flex-direction: column;
+        align-items: center;
+    }
+    
+    .stat-item {
+        width: 90%;
+        margin-bottom: 15px;
+    }
+}
