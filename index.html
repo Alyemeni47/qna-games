@@ -1,0 +1,1941 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>لعبة سؤال وجواب - Q&A Game</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        :root {
+            --primary: #6c5ce7;
+            --primary-dark: #5b4fcf;
+            --secondary: #00cec9;
+            --danger: #e74c3c;
+            --warning: #f39c12;
+            --success: #2ecc71;
+            --dark: #2d3436;
+            --light: #f9f9f9;
+            --gray: #dfe6e9;
+            --shadow: 0 10px 20px rgba(0, 0, 0, 0.1);
+            --transition: all 0.3s ease;
+            --border-radius: 12px;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        body {
+            background: linear-gradient(135deg, #6c5ce7 0%, #00cec9 100%);
+            min-height: 100vh;
+            color: var(--dark);
+            overflow-x: hidden;
+            transition: var(--transition);
+        }
+
+        body.ltr {
+            direction: ltr;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        /* Header */
+        header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 20px 0;
+            margin-bottom: 30px;
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+
+        .logo i {
+            font-size: 2.5rem;
+            color: var(--light);
+        }
+
+        .logo h1 {
+            color: white;
+            font-size: 2.2rem;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.2);
+        }
+
+        .language-switcher {
+            background: rgba(255, 255, 255, 0.2);
+            border-radius: 50px;
+            padding: 8px;
+            display: flex;
+            gap: 5px;
+            backdrop-filter: blur(10px);
+        }
+
+        .lang-btn {
+            background: transparent;
+            border: none;
+            color: white;
+            padding: 10px 20px;
+            border-radius: 50px;
+            cursor: pointer;
+            font-weight: bold;
+            transition: var(--transition);
+        }
+
+        .lang-btn.active {
+            background: white;
+            color: var(--primary);
+        }
+
+        /* Screens */
+        .screen {
+            display: none;
+            background: white;
+            border-radius: var(--border-radius);
+            padding: 30px;
+            box-shadow: var(--shadow);
+            animation: fadeIn 0.5s ease;
+        }
+
+        .screen.active {
+            display: block;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        /* Home Screen */
+        .home-screen {
+            text-align: center;
+            padding: 50px 30px;
+        }
+
+        .home-screen h2 {
+            font-size: 2.8rem;
+            margin-bottom: 20px;
+            color: var(--primary);
+        }
+
+        .home-screen p {
+            font-size: 1.2rem;
+            margin-bottom: 40px;
+            color: #666;
+            line-height: 1.6;
+        }
+
+        .start-btn {
+            background: linear-gradient(to right, var(--primary), var(--secondary));
+            color: white;
+            border: none;
+            padding: 20px 50px;
+            font-size: 1.8rem;
+            font-weight: bold;
+            border-radius: 50px;
+            cursor: pointer;
+            transition: var(--transition);
+            box-shadow: 0 5px 15px rgba(108, 92, 231, 0.4);
+            margin-bottom: 30px;
+        }
+
+        .start-btn:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 20px rgba(108, 92, 231, 0.5);
+        }
+
+        .features {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 20px;
+            margin-top: 50px;
+        }
+
+        .feature {
+            background: var(--light);
+            padding: 25px;
+            border-radius: var(--border-radius);
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
+        }
+
+        .feature i {
+            font-size: 2.5rem;
+            color: var(--primary);
+            margin-bottom: 15px;
+        }
+
+        /* Setup Screen */
+        .setup-screen h2 {
+            font-size: 2.2rem;
+            margin-bottom: 30px;
+            color: var(--primary);
+            text-align: center;
+        }
+
+        .setup-options {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 30px;
+            margin-bottom: 40px;
+        }
+
+        .setup-card {
+            background: var(--light);
+            padding: 25px;
+            border-radius: var(--border-radius);
+            border: 2px solid var(--gray);
+            transition: var(--transition);
+        }
+
+        .setup-card:hover {
+            border-color: var(--primary);
+            transform: translateY(-5px);
+        }
+
+        .setup-card h3 {
+            font-size: 1.5rem;
+            margin-bottom: 15px;
+            color: var(--dark);
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .setup-card h3 i {
+            color: var(--primary);
+        }
+
+        .team-inputs {
+            margin-top: 20px;
+        }
+
+        .team-input {
+            display: flex;
+            margin-bottom: 15px;
+        }
+
+        .team-input input {
+            flex: 1;
+            padding: 12px 15px;
+            border: 1px solid var(--gray);
+            border-radius: 8px 0 0 8px;
+            font-size: 1rem;
+        }
+
+        body:not(.ltr) .team-input input {
+            border-radius: 0 8px 8px 0;
+        }
+
+        .team-input button {
+            background: var(--danger);
+            color: white;
+            border: none;
+            padding: 0 20px;
+            border-radius: 0 8px 8px 0;
+            cursor: pointer;
+        }
+
+        body:not(.ltr) .team-input button {
+            border-radius: 8px 0 0 8px;
+        }
+
+        .add-team {
+            background: var(--success) !important;
+            width: 100%;
+            padding: 12px !important;
+            border-radius: 8px !important;
+            margin-top: 10px;
+        }
+
+        .category-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+            gap: 15px;
+            margin-top: 15px;
+        }
+
+        .category-btn {
+            padding: 15px 10px;
+            background: white;
+            border: 2px solid var(--gray);
+            border-radius: 8px;
+            cursor: pointer;
+            font-weight: bold;
+            transition: var(--transition);
+            text-align: center;
+        }
+
+        .category-btn.selected {
+            background: var(--primary);
+            color: white;
+            border-color: var(--primary);
+        }
+
+        .action-buttons {
+            display: flex;
+            justify-content: center;
+            gap: 20px;
+            margin-top: 30px;
+        }
+
+        .btn {
+            padding: 15px 30px;
+            border: none;
+            border-radius: 8px;
+            font-size: 1.1rem;
+            font-weight: bold;
+            cursor: pointer;
+            transition: var(--transition);
+        }
+
+        .btn-primary {
+            background: var(--primary);
+            color: white;
+        }
+
+        .btn-secondary {
+            background: var(--gray);
+            color: var(--dark);
+        }
+
+        /* Game Screen */
+        .game-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 30px;
+            padding-bottom: 20px;
+            border-bottom: 2px solid var(--gray);
+        }
+
+        .teams-display {
+            display: flex;
+            gap: 20px;
+            flex-wrap: wrap;
+        }
+
+        .team-score {
+            background: var(--light);
+            padding: 15px 25px;
+            border-radius: var(--border-radius);
+            text-align: center;
+            min-width: 150px;
+            box-shadow: var(--shadow);
+        }
+
+        .team-name {
+            font-weight: bold;
+            font-size: 1.2rem;
+            margin-bottom: 5px;
+        }
+
+        .team-points {
+            font-size: 2rem;
+            color: var(--primary);
+            font-weight: bold;
+        }
+
+        .timer-container {
+            text-align: center;
+        }
+
+        .timer {
+            font-size: 3rem;
+            font-weight: bold;
+            color: var(--danger);
+            margin-bottom: 10px;
+        }
+
+        .question-container {
+            background: var(--light);
+            padding: 30px;
+            border-radius: var(--border-radius);
+            margin-bottom: 30px;
+            box-shadow: var(--shadow);
+        }
+
+        .category-label {
+            display: inline-block;
+            background: var(--primary);
+            color: white;
+            padding: 8px 20px;
+            border-radius: 50px;
+            margin-bottom: 20px;
+            font-weight: bold;
+        }
+
+        .question-text {
+            font-size: 1.8rem;
+            line-height: 1.5;
+            margin-bottom: 30px;
+        }
+
+        .options-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 15px;
+            margin-bottom: 30px;
+        }
+
+        .option-btn {
+            padding: 20px;
+            background: white;
+            border: 2px solid var(--gray);
+            border-radius: 10px;
+            cursor: pointer;
+            font-size: 1.1rem;
+            text-align: center;
+            transition: var(--transition);
+        }
+
+        .option-btn:hover:not(.disabled) {
+            background: #f0f0f0;
+        }
+
+        .option-btn.selected {
+            background: var(--primary);
+            color: white;
+            border-color: var(--primary);
+        }
+
+        .option-btn.correct {
+            background: var(--success);
+            color: white;
+            border-color: var(--success);
+        }
+
+        .option-btn.incorrect {
+            background: var(--danger);
+            color: white;
+            border-color: var(--danger);
+        }
+
+        .disabled {
+            opacity: 0.6;
+            cursor: not-allowed;
+        }
+
+        .help-tools {
+            display: flex;
+            justify-content: center;
+            gap: 15px;
+            flex-wrap: wrap;
+            margin-bottom: 30px;
+        }
+
+        .help-btn {
+            padding: 15px 25px;
+            background: var(--warning);
+            color: white;
+            border: none;
+            border-radius: 8px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: var(--transition);
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .help-btn:disabled {
+            background: #ccc;
+            cursor: not-allowed;
+        }
+
+        .help-btn.used {
+            background: #95a5a6;
+        }
+
+        .game-controls {
+            display: flex;
+            justify-content: center;
+            gap: 20px;
+        }
+
+        /* Results Screen */
+        .results-screen h2 {
+            font-size: 2.5rem;
+            margin-bottom: 30px;
+            color: var(--primary);
+            text-align: center;
+        }
+
+        .winner-announcement {
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            color: white;
+            padding: 40px;
+            border-radius: var(--border-radius);
+            text-align: center;
+            margin-bottom: 40px;
+            box-shadow: var(--shadow);
+        }
+
+        .winner-announcement h3 {
+            font-size: 2.2rem;
+            margin-bottom: 20px;
+        }
+
+        .winner-announcement .winner-points {
+            font-size: 3rem;
+            font-weight: bold;
+            margin-bottom: 20px;
+        }
+
+        .results-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-bottom: 40px;
+        }
+
+        .results-table th,
+        .results-table td {
+            padding: 20px;
+            text-align: center;
+            border-bottom: 1px solid var(--gray);
+        }
+
+        .results-table th {
+            background: var(--light);
+            font-weight: bold;
+            color: var(--dark);
+        }
+
+        .results-table tr:last-child td {
+            border-bottom: none;
+        }
+
+        .results-table .team-name {
+            font-weight: bold;
+            font-size: 1.2rem;
+        }
+
+        .results-table .team-points {
+            font-size: 1.5rem;
+            color: var(--primary);
+            font-weight: bold;
+        }
+
+        .final-actions {
+            display: flex;
+            justify-content: center;
+            gap: 20px;
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .logo h1 {
+                font-size: 1.8rem;
+            }
+            
+            .home-screen h2 {
+                font-size: 2.2rem;
+            }
+            
+            .setup-options {
+                grid-template-columns: 1fr;
+            }
+            
+            .game-header {
+                flex-direction: column;
+                gap: 20px;
+            }
+            
+            .teams-display {
+                justify-content: center;
+            }
+            
+            .options-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .results-table {
+                display: block;
+                overflow-x: auto;
+            }
+        }
+
+        /* RTL/LTR adjustments */
+        body.ltr .team-input input {
+            border-radius: 8px 0 0 8px;
+        }
+        
+        body.ltr .team-input button {
+            border-radius: 0 8px 8px 0;
+        }
+        
+        body.ltr .logo h1 {
+            font-family: 'Arial', sans-serif;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <!-- Header with language switcher -->
+        <header>
+            <div class="logo">
+                <i class="fas fa-gamepad"></i>
+                <h1>لعبة سؤال وجواب</h1>
+            </div>
+            <div class="language-switcher">
+                <button class="lang-btn active" data-lang="ar">العربية</button>
+                <button class="lang-btn" data-lang="en">English</button>
+            </div>
+        </header>
+
+        <!-- Home Screen -->
+        <div id="home-screen" class="screen active">
+            <div class="home-screen">
+                <h2>مرحبًا بك في لعبة سؤال وجواب!</h2>
+                <p>تحدي معرفي جماعي مع فرق متعددة، فئات متنوعة، وأدوات مساعدة مثيرة. ابدأ التحدي الآن!</p>
+                <button id="start-btn" class="start-btn">
+                    <i class="fas fa-play-circle"></i> ابدأ اللعب
+                </button>
+                
+                <div class="features">
+                    <div class="feature">
+                        <i class="fas fa-users"></i>
+                        <h3>فرق متعددة</h3>
+                        <p>أنشئ فرقًا متعددة وتنافسوا معًا</p>
+                    </div>
+                    <div class="feature">
+                        <i class="fas fa-list-alt"></i>
+                        <h3>6 فئات متنوعة</h3>
+                        <p>اختر من بين 6 فئات معرفية مختلفة</p>
+                    </div>
+                    <div class="feature">
+                        <i class="fas fa-life-ring"></i>
+                        <h3>أدوات مساعدة</h3>
+                        <p>3 أدوات مساعدة لكل فريق لتحسين فرص الفوز</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Setup Screen -->
+        <div id="setup-screen" class="screen">
+            <h2>إعداد اللعبة</h2>
+            <div class="setup-options">
+                <div class="setup-card">
+                    <h3><i class="fas fa-users"></i> إنشاء الفرق</h3>
+                    <p>أضف فرقًا للمشاركة في اللعبة. يمكنك إضافة حتى 4 فرق.</p>
+                    <div class="team-inputs">
+                        <div class="team-input">
+                            <input type="text" id="team-name-input" placeholder="اسم الفريق">
+                            <button id="add-team-btn"><i class="fas fa-plus"></i></button>
+                        </div>
+                        <div id="teams-list">
+                            <!-- Teams will be added here -->
+                        </div>
+                        <button id="add-another-team" class="add-team btn">
+                            <i class="fas fa-user-plus"></i> إضافة فريق آخر
+                        </button>
+                    </div>
+                </div>
+                
+                <div class="setup-card">
+                    <h3><i class="fas fa-folder-open"></i> اختيار الفئات</h3>
+                    <p>اختر فئات الأسئلة (يجب اختيار فئتين على الأقل)</p>
+                    <div class="category-grid" id="category-grid">
+                        <!-- Categories will be added here -->
+                    </div>
+                </div>
+            </div>
+            
+            <div class="action-buttons">
+                <button id="back-to-home" class="btn btn-secondary">
+                    <i class="fas fa-arrow-right"></i> العودة
+                </button>
+                <button id="start-game-btn" class="btn btn-primary" disabled>
+                    <i class="fas fa-play"></i> بدء اللعبة
+                </button>
+            </div>
+        </div>
+
+        <!-- Game Screen -->
+        <div id="game-screen" class="screen">
+            <div class="game-header">
+                <div class="teams-display" id="teams-display">
+                    <!-- Teams scores will be added here -->
+                </div>
+                <div class="timer-container">
+                    <div class="timer" id="timer">30</div>
+                    <div>ثانية متبقية</div>
+                </div>
+            </div>
+            
+            <div class="question-container">
+                <div class="category-label" id="question-category">عام</div>
+                <div class="question-text" id="question-text">سؤال الاختبار سيظهر هنا</div>
+                
+                <div class="options-grid" id="options-grid">
+                    <!-- Options will be added here -->
+                </div>
+                
+                <div class="help-tools" id="help-tools">
+                    <!-- Help tools will be added here -->
+                </div>
+                
+                <div class="game-controls">
+                    <button id="next-question-btn" class="btn btn-primary">
+                        <i class="fas fa-forward"></i> السؤال التالي
+                    </button>
+                    <button id="end-game-btn" class="btn btn-danger">
+                        <i class="fas fa-stop-circle"></i> إنهاء اللعبة
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Results Screen -->
+        <div id="results-screen" class="screen">
+            <h2>نتائج اللعبة</h2>
+            
+            <div class="winner-announcement" id="winner-announcement">
+                <!-- Winner announcement will be added here -->
+            </div>
+            
+            <table class="results-table">
+                <thead>
+                    <tr>
+                        <th>المركز</th>
+                        <th>الفريق</th>
+                        <th>النقاط</th>
+                        <th>عدد الإجابات الصحيحة</th>
+                    </tr>
+                </thead>
+                <tbody id="results-table-body">
+                    <!-- Results will be added here -->
+                </tbody>
+            </table>
+            
+            <div class="final-actions">
+                <button id="play-again-btn" class="btn btn-primary">
+                    <i class="fas fa-redo"></i> لعب مرة أخرى
+                </button>
+                <button id="back-to-home-2" class="btn btn-secondary">
+                    <i class="fas fa-home"></i> العودة للرئيسية
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Game data and state
+        const gameData = {
+            currentLanguage: 'ar',
+            teams: [],
+            categories: [],
+            selectedCategories: [],
+            questions: [],
+            currentQuestionIndex: 0,
+            currentTeamIndex: 0,
+            timerInterval: null,
+            timeLeft: 30,
+            gameActive: false,
+            helpToolsUsed: {
+                deleteTwoOptions: false,
+                changeQuestion: false,
+                doublePoints: false
+            }
+        };
+
+        // Questions database (6 categories, 6 questions each)
+        const questionsDatabase = {
+            ar: {
+                "علوم": [
+                    {
+                        question: "ما هو العنصر الأكثر وفرة في الكون؟",
+                        options: ["الهيدروجين", "الهيليوم", "الأكسجين", "الكربون"],
+                        correctAnswer: 0
+                    },
+                    {
+                        question: "كم عدد العظام في جسم الإنسان البالغ؟",
+                        options: ["206", "300", "150", "250"],
+                        correctAnswer: 0
+                    },
+                    {
+                        question: "ما هو الكوكب الأقرب إلى الشمس؟",
+                        options: ["الزهرة", "عطارد", "المريخ", "الأرض"],
+                        correctAnswer: 1
+                    },
+                    {
+                        question: "ما هو أسرع حيوان بري؟",
+                        options: ["الفهد", "الأسد", "الحصان", "الغزال"],
+                        correctAnswer: 0
+                    },
+                    {
+                        question: "ما هو الغاز الذي تتنفسه النباتات في عملية التمثيل الضوئي؟",
+                        options: ["الأكسجين", "النتروجين", "ثاني أكسيد الكربون", "الهيدروجين"],
+                        correctAnswer: 2
+                    },
+                    {
+                        question: "ما هي أصغر وحدة بناء في المادة؟",
+                        options: ["الخلية", "الجزيء", "الذرة", "الإلكترون"],
+                        correctAnswer: 2
+                    }
+                ],
+                "تاريخ": [
+                    {
+                        question: "في أي عام هبط الإنسان على القمر لأول مرة؟",
+                        options: ["1965", "1969", "1972", "1958"],
+                        correctAnswer: 1
+                    },
+                    {
+                        question: "من هو أول رئيس للولايات المتحدة الأمريكية؟",
+                        options: ["جون آدمز", "جورج واشنطن", "توماس جيفرسون", "أبراهام لينكولن"],
+                        correctAnswer: 1
+                    },
+                    {
+                        question: "في أي عام انتهت الحرب العالمية الثانية؟",
+                        options: ["1943", "1945", "1950", "1939"],
+                        correctAnswer: 1
+                    },
+                    {
+                        question: "أين أقيمت أول دورة ألعاب أولمبية حديثة؟",
+                        options: ["روما", "أثينا", "باريس", "لندن"],
+                        correctAnswer: 1
+                    },
+                    {
+                        question: "من هو مخترع الهاتف؟",
+                        options: ["توماس إديسون", "غراهام بل", "نيكولا تيسلا", "ألبرت أينشتاين"],
+                        correctAnswer: 1
+                    },
+                    {
+                        question: "ما هي أقدم حضارة في العالم؟",
+                        options: ["الحضارة المصرية", "الحضارة اليونانية", "حضارة بلاد الرافدين", "الحضارة الصينية"],
+                        correctAnswer: 2
+                    }
+                ],
+                "رياضة": [
+                    {
+                        question: "في أي رياضة يستخدم اللاعبون مضارب وكرة صغيرة؟",
+                        options: ["التنس", "الكريكيت", "الهوكي", "الجولف"],
+                        correctAnswer: 0
+                    },
+                    {
+                        question: "كم عدد اللاعبين في فريق كرة القدم؟",
+                        options: ["10", "11", "12", "9"],
+                        correctAnswer: 1
+                    },
+                    {
+                        question: "ما هي الدولة التي فازت بكأس العالم لكرة القدم لأكبر عدد من المرات؟",
+                        options: ["ألمانيا", "الأرجنتين", "البرازيل", "إيطاليا"],
+                        correctAnswer: 2
+                    },
+                    {
+                        question: "في أي رياضة توجد حلبة تسمى 'رينغ'؟",
+                        options: ["الملاكمة", "كرة السلة", "التنس", "السباحة"],
+                        correctAnswer: 0
+                    },
+                    {
+                        question: "ما هو طول ملعب كرة القدم الدولي؟",
+                        options: ["90-120 متر", "100-110 متر", "70-80 متر", "80-90 متر"],
+                        correctAnswer: 0
+                    },
+                    {
+                        question: "من هو اللاعب الذي سجل أكبر عدد من الأهداف في تاريخ كأس العالم؟",
+                        options: ["بيليه", "ميروسلاف كلوزه", "كريستيانو رونالدو", "ليونيل ميسي"],
+                        correctAnswer: 1
+                    }
+                ],
+                "فنون": [
+                    {
+                        question: "من رسم لوحة 'الموناليزا'؟",
+                        options: ["فان جوخ", "بابلو بيكاسو", "ليوناردو دافنشي", "رامبرانت"],
+                        correctAnswer: 2
+                    },
+                    {
+                        question: "ما هي الآلة الموسيقية التي اشتهر بها بيتهوفن؟",
+                        options: ["الكمان", "البيانو", "الناي", "القيثارة"],
+                        correctAnswer: 1
+                    },
+                    {
+                        question: "من هو مؤلف مسرحية 'هاملت'؟",
+                        options: ["وليم شكسبير", "أوسكار وايلد", "جورج برنارد شو", "أنطون تشيخوف"],
+                        correctAnswer: 0
+                    },
+                    {
+                        question: "ما هو الفن الذي يمارسه الممثلون؟",
+                        options: ["الرسم", "النحت", "التمثيل", "الغناء"],
+                        correctAnswer: 2
+                    },
+                    {
+                        question: "من هو مغني البوب المعروف بأغنية 'Thriller'؟",
+                        options: ["إلتون جون", "مايكل جاكسون", "برنس", "مادونا"],
+                        correctAnswer: 1
+                    },
+                    {
+                        question: "ما هي الجائزة السينمائية الأكبر في الولايات المتحدة؟",
+                        options: ["جائزة الأوسكار", "جائزة الغولدن غلوب", "جائزة الإيمي", "جائزة البافتا"],
+                        correctAnswer: 0
+                    }
+                ],
+                "جغرافيا": [
+                    {
+                        question: "ما هي أكبر دولة في العالم من حيث المساحة؟",
+                        options: ["كندا", "الصين", "الولايات المتحدة", "روسيا"],
+                        correctAnswer: 3
+                    },
+                    {
+                        question: "ما هو أطول نهر في العالم؟",
+                        options: ["نهر النيل", "نهر الأمازون", "نهر اليانغتسي", "نهر المسيسيبي"],
+                        correctAnswer: 0
+                    },
+                    {
+                        question: "ما هي عاصمة فرنسا؟",
+                        options: ["لندن", "برلين", "مدريد", "باريس"],
+                        correctAnswer: 3
+                    },
+                    {
+                        question: "في أي قمة تقع دولة النيبال؟",
+                        options: ["قمة إفرست", "قمة كي 2", "قمة كانغشينجونغا", "قمة لوتسي"],
+                        correctAnswer: 0
+                    },
+                    {
+                        question: "ما هي أكبر صحراء في العالم؟",
+                        options: ["الصحراء الكبرى", "صحراء غوبي", "صحراء القطب الجنوبي", "صحراء الربع الخالي"],
+                        correctAnswer: 2
+                    },
+                    {
+                        question: "ما هو المحيط الأكبر على الأرض؟",
+                        options: ["المحيط الأطلسي", "المحيط الهادئ", "المحيط الهندي", "المحيط المتجمد الشمالي"],
+                        correctAnswer: 1
+                    }
+                ],
+                "تكنولوجيا": [
+                    {
+                        question: "ما هي لغة البرمجة التي تستخدم لتطوير صفحات الويب التفاعلية؟",
+                        options: ["Python", "Java", "JavaScript", "C++"],
+                        correctAnswer: 2
+                    },
+                    {
+                        question: "من هو مؤسس شركة مايكروسوفت؟",
+                        options: ["ستيف جوبز", "بيل غيتس", "مارك زوكربيرغ", "لاري بيج"],
+                        correctAnswer: 1
+                    },
+                    {
+                        question: "ما هو نظام التشغيل الأكثر استخدامًا في الهواتف الذكية؟",
+                        options: ["iOS", "Android", "Windows Phone", "BlackBerry OS"],
+                        correctAnswer: 1
+                    },
+                    {
+                        question: "ما هو الاختصار الذي يعني 'شبكة الويب العالمية'؟",
+                        options: ["HTTP", "HTML", "WWW", "URL"],
+                        correctAnswer: 2
+                    },
+                    {
+                        question: "ما هي شركة التكنولوجيا التي أنشأت هاتف آيفون؟",
+                        options: ["سامسونج", "غوغل", "آبل", "هواوي"],
+                        correctAnswer: 2
+                    },
+                    {
+                        question: "ما هو أكبر موقع للتواصل الاجتماعي من حيث عدد المستخدمين؟",
+                        options: ["تويتر", "فيسبوك", "إنستغرام", "تيك توك"],
+                        correctAnswer: 1
+                    }
+                ]
+            },
+            en: {
+                "Science": [
+                    {
+                        question: "What is the most abundant element in the universe?",
+                        options: ["Hydrogen", "Helium", "Oxygen", "Carbon"],
+                        correctAnswer: 0
+                    },
+                    {
+                        question: "How many bones are in the adult human body?",
+                        options: ["206", "300", "150", "250"],
+                        correctAnswer: 0
+                    },
+                    {
+                        question: "Which planet is closest to the sun?",
+                        options: ["Venus", "Mercury", "Mars", "Earth"],
+                        correctAnswer: 1
+                    },
+                    {
+                        question: "What is the fastest land animal?",
+                        options: ["Cheetah", "Lion", "Horse", "Gazelle"],
+                        correctAnswer: 0
+                    },
+                    {
+                        question: "What gas do plants breathe in during photosynthesis?",
+                        options: ["Oxygen", "Nitrogen", "Carbon dioxide", "Hydrogen"],
+                        correctAnswer: 2
+                    },
+                    {
+                        question: "What is the smallest unit of matter?",
+                        options: ["Cell", "Molecule", "Atom", "Electron"],
+                        correctAnswer: 2
+                    }
+                ],
+                "History": [
+                    {
+                        question: "In which year did humans first land on the moon?",
+                        options: ["1965", "1969", "1972", "1958"],
+                        correctAnswer: 1
+                    },
+                    {
+                        question: "Who was the first president of the United States?",
+                        options: ["John Adams", "George Washington", "Thomas Jefferson", "Abraham Lincoln"],
+                        correctAnswer: 1
+                    },
+                    {
+                        question: "In which year did World War II end?",
+                        options: ["1943", "1945", "1950", "1939"],
+                        correctAnswer: 1
+                    },
+                    {
+                        question: "Where were the first modern Olympic Games held?",
+                        options: ["Rome", "Athens", "Paris", "London"],
+                        correctAnswer: 1
+                    },
+                    {
+                        question: "Who invented the telephone?",
+                        options: ["Thomas Edison", "Alexander Graham Bell", "Nikola Tesla", "Albert Einstein"],
+                        correctAnswer: 1
+                    },
+                    {
+                        question: "What is the oldest civilization in the world?",
+                        options: ["Egyptian", "Greek", "Mesopotamian", "Chinese"],
+                        correctAnswer: 2
+                    }
+                ],
+                "Sports": [
+                    {
+                        question: "In which sport do players use rackets and a small ball?",
+                        options: ["Tennis", "Cricket", "Hockey", "Golf"],
+                        correctAnswer: 0
+                    },
+                    {
+                        question: "How many players are in a football team?",
+                        options: ["10", "11", "12", "9"],
+                        correctAnswer: 1
+                    },
+                    {
+                        question: "Which country has won the FIFA World Cup the most times?",
+                        options: ["Germany", "Argentina", "Brazil", "Italy"],
+                        correctAnswer: 2
+                    },
+                    {
+                        question: "In which sport is there an arena called a 'ring'?",
+                        options: ["Boxing", "Basketball", "Tennis", "Swimming"],
+                        correctAnswer: 0
+                    },
+                    {
+                        question: "What is the length of an international football field?",
+                        options: ["90-120 meters", "100-110 meters", "70-80 meters", "80-90 meters"],
+                        correctAnswer: 0
+                    },
+                    {
+                        question: "Which player has scored the most goals in World Cup history?",
+                        options: ["Pelé", "Miroslav Klose", "Cristiano Ronaldo", "Lionel Messi"],
+                        correctAnswer: 1
+                    }
+                ],
+                "Arts": [
+                    {
+                        question: "Who painted the 'Mona Lisa'?",
+                        options: ["Van Gogh", "Pablo Picasso", "Leonardo da Vinci", "Rembrandt"],
+                        correctAnswer: 2
+                    },
+                    {
+                        question: "Which musical instrument was Beethoven famous for?",
+                        options: ["Violin", "Piano", "Flute", "Guitar"],
+                        correctAnswer: 1
+                    },
+                    {
+                        question: "Who wrote the play 'Hamlet'?",
+                        options: ["William Shakespeare", "Oscar Wilde", "George Bernard Shaw", "Anton Chekhov"],
+                        correctAnswer: 0
+                    },
+                    {
+                        question: "What art do actors practice?",
+                        options: ["Painting", "Sculpture", "Acting", "Singing"],
+                        correctAnswer: 2
+                    },
+                    {
+                        question: "Who is the pop singer known for the song 'Thriller'?",
+                        options: ["Elton John", "Michael Jackson", "Prince", "Madonna"],
+                        correctAnswer: 1
+                    },
+                    {
+                        question: "What is the biggest film award in the United States?",
+                        options: ["Oscar", "Golden Globe", "Emmy", "BAFTA"],
+                        correctAnswer: 0
+                    }
+                ],
+                "Geography": [
+                    {
+                        question: "Which is the largest country in the world by area?",
+                        options: ["Canada", "China", "United States", "Russia"],
+                        correctAnswer: 3
+                    },
+                    {
+                        question: "What is the longest river in the world?",
+                        options: ["Nile", "Amazon", "Yangtze", "Mississippi"],
+                        correctAnswer: 0
+                    },
+                    {
+                        question: "What is the capital of France?",
+                        options: ["London", "Berlin", "Madrid", "Paris"],
+                        correctAnswer: 3
+                    },
+                    {
+                        question: "In which peak is Nepal located?",
+                        options: ["Mount Everest", "K2", "Kangchenjunga", "Lhotse"],
+                        correctAnswer: 0
+                    },
+                    {
+                        question: "What is the largest desert in the world?",
+                        options: ["Sahara", "Gobi", "Antarctic Desert", "Arabian Desert"],
+                        correctAnswer: 2
+                    },
+                    {
+                        question: "What is the largest ocean on Earth?",
+                        options: ["Atlantic Ocean", "Pacific Ocean", "Indian Ocean", "Arctic Ocean"],
+                        correctAnswer: 1
+                    }
+                ],
+                "Technology": [
+                    {
+                        question: "Which programming language is used to develop interactive web pages?",
+                        options: ["Python", "Java", "JavaScript", "C++"],
+                        correctAnswer: 2
+                    },
+                    {
+                        question: "Who is the founder of Microsoft?",
+                        options: ["Steve Jobs", "Bill Gates", "Mark Zuckerberg", "Larry Page"],
+                        correctAnswer: 1
+                    },
+                    {
+                        question: "What is the most used operating system in smartphones?",
+                        options: ["iOS", "Android", "Windows Phone", "BlackBerry OS"],
+                        correctAnswer: 1
+                    },
+                    {
+                        question: "What does the acronym 'WWW' stand for?",
+                        options: ["HTTP", "HTML", "World Wide Web", "URL"],
+                        correctAnswer: 2
+                    },
+                    {
+                        question: "Which technology company created the iPhone?",
+                        options: ["Samsung", "Google", "Apple", "Huawei"],
+                        correctAnswer: 2
+                    },
+                    {
+                        question: "What is the largest social media platform by number of users?",
+                        options: ["Twitter", "Facebook", "Instagram", "TikTok"],
+                        correctAnswer: 1
+                    }
+                ]
+            }
+        };
+
+        // Language translations
+        const translations = {
+            ar: {
+                "welcome": "مرحبًا بك في لعبة سؤال وجواب!",
+                "welcomeSub": "تحدي معرفي جماعي مع فرق متعددة، فئات متنوعة، وأدوات مساعدة مثيرة. ابدأ التحدي الآن!",
+                "startGame": "ابدأ اللعب",
+                "teams": "فرق",
+                "categories": "فئات",
+                "helpTools": "أدوات مساعدة",
+                "createTeams": "إنشاء الفرق",
+                "teamsDesc": "أضف فرقًا للمشاركة في اللعبة. يمكنك إضافة حتى 4 فرق.",
+                "teamNamePlaceholder": "اسم الفريق",
+                "addTeam": "إضافة فريق",
+                "addAnotherTeam": "إضافة فريق آخر",
+                "selectCategories": "اختيار الفئات",
+                "categoriesDesc": "اختر فئات الأسئلة (يجب اختيار فئتين على الأقل)",
+                "back": "العودة",
+                "start": "بدء اللعبة",
+                "secondsLeft": "ثانية متبقية",
+                "nextQuestion": "السؤال التالي",
+                "endGame": "إنهاء اللعبة",
+                "gameResults": "نتائج اللعبة",
+                "playAgain": "لعب مرة أخرى",
+                "backToHome": "العودة للرئيسية",
+                "deleteTwoOptions": "حذف خيارين",
+                "changeQuestion": "تغيير السؤال",
+                "doublePoints": "مضاعفة النقاط",
+                "used": "مستعمل",
+                "winner": "الفائز",
+                "position": "المركز",
+                "team": "الفريق",
+                "points": "النقاط",
+                "correctAnswers": "عدد الإجابات الصحيحة",
+                "timeUp": "انتهى الوقت!",
+                "selectAnswer": "اختر إجابة!"
+            },
+            en: {
+                "welcome": "Welcome to Q&A Game!",
+                "welcomeSub": "A team-based knowledge challenge with multiple teams, diverse categories, and exciting help tools. Start the challenge now!",
+                "startGame": "Start Playing",
+                "teams": "Teams",
+                "categories": "Categories",
+                "helpTools": "Help Tools",
+                "createTeams": "Create Teams",
+                "teamsDesc": "Add teams to participate in the game. You can add up to 4 teams.",
+                "teamNamePlaceholder": "Team name",
+                "addTeam": "Add Team",
+                "addAnotherTeam": "Add Another Team",
+                "selectCategories": "Select Categories",
+                "categoriesDesc": "Choose question categories (must select at least two)",
+                "back": "Back",
+                "start": "Start Game",
+                "secondsLeft": "seconds left",
+                "nextQuestion": "Next Question",
+                "endGame": "End Game",
+                "gameResults": "Game Results",
+                "playAgain": "Play Again",
+                "backToHome": "Back to Home",
+                "deleteTwoOptions": "Delete Two Options",
+                "changeQuestion": "Change Question",
+                "doublePoints": "Double Points",
+                "used": "Used",
+                "winner": "Winner",
+                "position": "Position",
+                "team": "Team",
+                "points": "Points",
+                "correctAnswers": "Correct Answers",
+                "timeUp": "Time's Up!",
+                "selectAnswer": "Select an answer!"
+            }
+        };
+
+        // DOM Elements
+        const screens = {
+            home: document.getElementById('home-screen'),
+            setup: document.getElementById('setup-screen'),
+            game: document.getElementById('game-screen'),
+            results: document.getElementById('results-screen')
+        };
+
+        const languageButtons = document.querySelectorAll('.lang-btn');
+        const startButton = document.getElementById('start-btn');
+        const backToHomeButtons = document.querySelectorAll('#back-to-home, #back-to-home-2');
+        const startGameButton = document.getElementById('start-game-btn');
+        const teamNameInput = document.getElementById('team-name-input');
+        const addTeamButton = document.getElementById('add-team-btn');
+        const addAnotherTeamButton = document.getElementById('add-another-team');
+        const teamsList = document.getElementById('teams-list');
+        const categoryGrid = document.getElementById('category-grid');
+        const nextQuestionButton = document.getElementById('next-question-btn');
+        const endGameButton = document.getElementById('end-game-btn');
+        const playAgainButton = document.getElementById('play-again-btn');
+        const questionText = document.getElementById('question-text');
+        const questionCategory = document.getElementById('question-category');
+        const optionsGrid = document.getElementById('options-grid');
+        const helpTools = document.getElementById('help-tools');
+        const timerElement = document.getElementById('timer');
+        const teamsDisplay = document.getElementById('teams-display');
+        const winnerAnnouncement = document.getElementById('winner-announcement');
+        const resultsTableBody = document.getElementById('results-table-body');
+
+        // Initialize the game
+        function initGame() {
+            // Set up language switcher
+            languageButtons.forEach(btn => {
+                btn.addEventListener('click', () => {
+                    const lang = btn.getAttribute('data-lang');
+                    switchLanguage(lang);
+                });
+            });
+
+            // Navigation between screens
+            startButton.addEventListener('click', () => switchScreen('setup'));
+            
+            backToHomeButtons.forEach(btn => {
+                btn.addEventListener('click', () => switchScreen('home'));
+            });
+            
+            startGameButton.addEventListener('click', startGame);
+            nextQuestionButton.addEventListener('click', nextQuestion);
+            endGameButton.addEventListener('click', endGame);
+            playAgainButton.addEventListener('click', playAgain);
+            
+            // Team management
+            addTeamButton.addEventListener('click', addTeam);
+            addAnotherTeamButton.addEventListener('click', addTeam);
+            teamNameInput.addEventListener('keypress', (e) => {
+                if (e.key === 'Enter') addTeam();
+            });
+            
+            // Initialize categories
+            initializeCategories();
+            
+            // Initialize help tools
+            initializeHelpTools();
+        }
+
+        // Switch between screens
+        function switchScreen(screenName) {
+            // Hide all screens
+            Object.values(screens).forEach(screen => {
+                screen.classList.remove('active');
+            });
+            
+            // Show the requested screen
+            screens[screenName].classList.add('active');
+            
+            // Initialize screen-specific content
+            if (screenName === 'setup') {
+                initializeSetupScreen();
+            } else if (screenName === 'game') {
+                // Already handled by startGame function
+            } else if (screenName === 'results') {
+                showResults();
+            }
+        }
+
+        // Switch language
+        function switchLanguage(lang) {
+            if (gameData.currentLanguage === lang) return;
+            
+            gameData.currentLanguage = lang;
+            
+            // Update language buttons
+            languageButtons.forEach(btn => {
+                if (btn.getAttribute('data-lang') === lang) {
+                    btn.classList.add('active');
+                } else {
+                    btn.classList.remove('active');
+                }
+            });
+            
+            // Update body direction
+            if (lang === 'ar') {
+                document.body.classList.remove('ltr');
+                document.body.dir = 'rtl';
+                document.documentElement.lang = 'ar';
+            } else {
+                document.body.classList.add('ltr');
+                document.body.dir = 'ltr';
+                document.documentElement.lang = 'en';
+            }
+            
+            // Update text content based on language
+            updateTextContent();
+            
+            // Reinitialize categories with new language
+            initializeCategories();
+            
+            // If in game screen, reload the current question
+            if (screens.game.classList.contains('active')) {
+                loadQuestion();
+            }
+            
+            // If in setup screen, update team placeholders
+            if (screens.setup.classList.contains('active')) {
+                teamNameInput.placeholder = translations[lang].teamNamePlaceholder;
+            }
+        }
+
+        // Update all text content based on current language
+        function updateTextContent() {
+            const lang = gameData.currentLanguage;
+            const t = translations[lang];
+            
+            // Update home screen
+            document.querySelector('.home-screen h2').textContent = t.welcome;
+            document.querySelector('.home-screen p').textContent = t.welcomeSub;
+            startButton.innerHTML = `<i class="fas fa-play-circle"></i> ${t.startGame}`;
+            
+            // Update feature titles
+            document.querySelectorAll('.feature h3').forEach((el, index) => {
+                if (index === 0) el.textContent = t.teams;
+                else if (index === 1) el.textContent = t.categories;
+                else if (index === 2) el.textContent = t.helpTools;
+            });
+            
+            // Update setup screen
+            document.querySelector('#setup-screen h2').textContent = lang === 'ar' ? 'إعداد اللعبة' : 'Game Setup';
+            
+            const setupCards = document.querySelectorAll('.setup-card h3');
+            setupCards[0].innerHTML = `<i class="fas fa-users"></i> ${t.createTeams}`;
+            setupCards[1].innerHTML = `<i class="fas fa-folder-open"></i> ${t.selectCategories}`;
+            
+            document.querySelectorAll('.setup-card p')[0].textContent = t.teamsDesc;
+            document.querySelectorAll('.setup-card p')[1].textContent = t.categoriesDesc;
+            
+            addAnotherTeamButton.innerHTML = `<i class="fas fa-user-plus"></i> ${t.addAnotherTeam}`;
+            document.getElementById('back-to-home').innerHTML = `<i class="fas fa-arrow-right"></i> ${t.back}`;
+            startGameButton.innerHTML = `<i class="fas fa-play"></i> ${t.start}`;
+            
+            // Update game screen
+            document.querySelector('.timer-container div:last-child').textContent = t.secondsLeft;
+            nextQuestionButton.innerHTML = `<i class="fas fa-forward"></i> ${t.nextQuestion}`;
+            endGameButton.innerHTML = `<i class="fas fa-stop-circle"></i> ${t.endGame}`;
+            
+            // Update results screen
+            document.querySelector('#results-screen h2').textContent = t.gameResults;
+            playAgainButton.innerHTML = `<i class="fas fa-redo"></i> ${t.playAgain}`;
+            document.getElementById('back-to-home-2').innerHTML = `<i class="fas fa-home"></i> ${t.backToHome}`;
+            
+            // Update results table headers
+            const tableHeaders = document.querySelectorAll('.results-table th');
+            tableHeaders[0].textContent = t.position;
+            tableHeaders[1].textContent = t.team;
+            tableHeaders[2].textContent = t.points;
+            tableHeaders[3].textContent = t.correctAnswers;
+        }
+
+        // Initialize categories for selection
+        function initializeCategories() {
+            categoryGrid.innerHTML = '';
+            const lang = gameData.currentLanguage;
+            const categories = Object.keys(questionsDatabase[lang]);
+            
+            categories.forEach((category, index) => {
+                const button = document.createElement('button');
+                button.className = 'category-btn';
+                button.textContent = category;
+                button.dataset.category = category;
+                
+                button.addEventListener('click', () => {
+                    button.classList.toggle('selected');
+                    
+                    if (button.classList.contains('selected')) {
+                        gameData.selectedCategories.push(category);
+                    } else {
+                        const idx = gameData.selectedCategories.indexOf(category);
+                        if (idx > -1) gameData.selectedCategories.splice(idx, 1);
+                    }
+                    
+                    // Enable start button if at least 2 categories selected and at least 1 team
+                    startGameButton.disabled = !(gameData.selectedCategories.length >= 2 && gameData.teams.length > 0);
+                });
+                
+                categoryGrid.appendChild(button);
+            });
+        }
+
+        // Initialize setup screen
+        function initializeSetupScreen() {
+            // Reset game data
+            gameData.teams = [];
+            gameData.selectedCategories = [];
+            gameData.currentQuestionIndex = 0;
+            gameData.currentTeamIndex = 0;
+            
+            // Clear teams list
+            teamsList.innerHTML = '';
+            
+            // Reset start button
+            startGameButton.disabled = true;
+            
+            // Reset category selections
+            document.querySelectorAll('.category-btn').forEach(btn => {
+                btn.classList.remove('selected');
+            });
+            
+            // Set placeholder text based on language
+            teamNameInput.placeholder = translations[gameData.currentLanguage].teamNamePlaceholder;
+        }
+
+        // Add a team
+        function addTeam() {
+            const teamName = teamNameInput.value.trim();
+            const lang = gameData.currentLanguage;
+            
+            if (!teamName) {
+                alert(lang === 'ar' ? 'يرجى إدخال اسم الفريق' : 'Please enter a team name');
+                return;
+            }
+            
+            if (gameData.teams.length >= 4) {
+                alert(lang === 'ar' ? 'يمكنك إضافة 4 فرق كحد أقصى' : 'You can add up to 4 teams maximum');
+                return;
+            }
+            
+            // Add team to game data
+            const team = {
+                name: teamName,
+                points: 0,
+                correctAnswers: 0,
+                helpTools: {
+                    deleteTwoOptions: true,
+                    changeQuestion: true,
+                    doublePoints: true
+                }
+            };
+            
+            gameData.teams.push(team);
+            
+            // Add team to UI
+            const teamElement = document.createElement('div');
+            teamElement.className = 'team-item';
+            teamElement.innerHTML = `
+                <span>${teamName}</span>
+                <button class="remove-team" data-index="${gameData.teams.length - 1}">
+                    <i class="fas fa-times"></i>
+                </button>
+            `;
+            
+            teamsList.appendChild(teamElement);
+            
+            // Add event listener to remove button
+            teamElement.querySelector('.remove-team').addEventListener('click', function() {
+                const index = parseInt(this.getAttribute('data-index'));
+                removeTeam(index);
+            });
+            
+            // Clear input
+            teamNameInput.value = '';
+            
+            // Enable start button if at least 2 categories selected
+            startGameButton.disabled = !(gameData.selectedCategories.length >= 2 && gameData.teams.length > 0);
+        }
+
+        // Remove a team
+        function removeTeam(index) {
+            gameData.teams.splice(index, 1);
+            
+            // Reinitialize teams list
+            teamsList.innerHTML = '';
+            
+            gameData.teams.forEach((team, idx) => {
+                const teamElement = document.createElement('div');
+                teamElement.className = 'team-item';
+                teamElement.innerHTML = `
+                    <span>${team.name}</span>
+                    <button class="remove-team" data-index="${idx}">
+                        <i class="fas fa-times"></i>
+                    </button>
+                `;
+                
+                teamsList.appendChild(teamElement);
+                
+                // Add event listener to remove button
+                teamElement.querySelector('.remove-team').addEventListener('click', function() {
+                    const newIndex = parseInt(this.getAttribute('data-index'));
+                    removeTeam(newIndex);
+                });
+            });
+            
+            // Update start button state
+            startGameButton.disabled = !(gameData.selectedCategories.length >= 2 && gameData.teams.length > 0);
+        }
+
+        // Start the game
+        function startGame() {
+            // Generate questions from selected categories
+            generateQuestions();
+            
+            // Initialize game state
+            gameData.currentQuestionIndex = 0;
+            gameData.currentTeamIndex = 0;
+            gameData.gameActive = true;
+            
+            // Reset help tools for all teams
+            gameData.teams.forEach(team => {
+                team.helpTools = {
+                    deleteTwoOptions: true,
+                    changeQuestion: true,
+                    doublePoints: true
+                };
+            });
+            
+            // Switch to game screen
+            switchScreen('game');
+            
+            // Initialize game UI
+            initializeGameUI();
+            
+            // Load first question
+            loadQuestion();
+            
+            // Start timer
+            startTimer();
+        }
+
+        // Generate questions from selected categories
+        function generateQuestions() {
+            gameData.questions = [];
+            const lang = gameData.currentLanguage;
+            
+            // For each selected category, add all questions
+            gameData.selectedCategories.forEach(category => {
+                if (questionsDatabase[lang][category]) {
+                    questionsDatabase[lang][category].forEach(question => {
+                        gameData.questions.push({
+                            ...question,
+                            category: category
+                        });
+                    });
+                }
+            });
+            
+            // Shuffle questions
+            shuffleArray(gameData.questions);
+            
+            // Limit to 36 questions max
+            if (gameData.questions.length > 36) {
+                gameData.questions = gameData.questions.slice(0, 36);
+            }
+        }
+
+        // Shuffle array (Fisher-Yates algorithm)
+        function shuffleArray(array) {
+            for (let i = array.length - 1; i > 0; i--) {
+                const j = Math.floor(Math.random() * (i + 1));
+                [array[i], array[j]] = [array[j], array[i]];
+            }
+            return array;
+        }
+
+        // Initialize game UI
+        function initializeGameUI() {
+            // Update teams display
+            updateTeamsDisplay();
+            
+            // Initialize help tools for current team
+            initializeHelpTools();
+        }
+
+        // Update teams display in game screen
+        function updateTeamsDisplay() {
+            teamsDisplay.innerHTML = '';
+            
+            gameData.teams.forEach((team, index) => {
+                const teamScore = document.createElement('div');
+                teamScore.className = `team-score ${index === gameData.currentTeamIndex ? 'active' : ''}`;
+                teamScore.innerHTML = `
+                    <div class="team-name">${team.name}</div>
+                    <div class="team-points">${team.points}</div>
+                `;
+                
+                teamsDisplay.appendChild(teamScore);
+            });
+        }
+
+        // Initialize help tools
+        function initializeHelpTools() {
+            helpTools.innerHTML = '';
+            const lang = gameData.currentLanguage;
+            const t = translations[lang];
+            
+            // Only show tools for the current team if they haven't been used
+            const currentTeam = gameData.teams[gameData.currentTeamIndex];
+            
+            if (!currentTeam) return;
+            
+            const tools = [
+                { id: 'deleteTwoOptions', icon: 'fas fa-ban', text: t.deleteTwoOptions },
+                { id: 'changeQuestion', icon: 'fas fa-sync-alt', text: t.changeQuestion },
+                { id: 'doublePoints', icon: 'fas fa-times-circle', text: t.doublePoints }
+            ];
+            
+            tools.forEach(tool => {
+                const isUsed = !currentTeam.helpTools[tool.id];
+                const button = document.createElement('button');
+                button.className = `help-btn ${isUsed ? 'used' : ''}`;
+                button.id = tool.id;
+                button.disabled = isUsed;
+                button.innerHTML = `<i class="${tool.icon}"></i> ${tool.text} ${isUsed ? `(${t.used})` : ''}`;
+                
+                if (!isUsed) {
+                    button.addEventListener('click', () => useHelpTool(tool.id));
+                }
+                
+                helpTools.appendChild(button);
+            });
+        }
+
+        // Use a help tool
+        function useHelpTool(toolId) {
+            const currentTeam = gameData.teams[gameData.currentTeamIndex];
+            
+            // Mark tool as used for this team
+            currentTeam.helpTools[toolId] = false;
+            
+            // Apply tool effect
+            switch(toolId) {
+                case 'deleteTwoOptions':
+                    deleteTwoOptions();
+                    break;
+                case 'changeQuestion':
+                    changeQuestion();
+                    break;
+                case 'doublePoints':
+                    // This tool will be applied when answering correctly
+                    // Just mark it as used for now
+                    break;
+            }
+            
+            // Update help tools UI
+            initializeHelpTools();
+        }
+
+        // Delete two incorrect options
+        function deleteTwoOptions() {
+            const currentQuestion = gameData.questions[gameData.currentQuestionIndex];
+            const options = document.querySelectorAll('.option-btn');
+            const incorrectOptions = [];
+            
+            // Find incorrect options
+            options.forEach((option, index) => {
+                if (index !== currentQuestion.correctAnswer) {
+                    incorrectOptions.push(option);
+                }
+            });
+            
+            // Shuffle incorrect options
+            shuffleArray(incorrectOptions);
+            
+            // Remove first two incorrect options (if available)
+            for (let i = 0; i < Math.min(2, incorrectOptions.length); i++) {
+                incorrectOptions[i].classList.add('disabled');
+                incorrectOptions[i].style.pointerEvents = 'none';
+                incorrectOptions[i].style.opacity = '0.5';
+            }
+        }
+
+        // Change the current question
+        function changeQuestion() {
+            // Move to next question
+            gameData.currentQuestionIndex++;
+            
+            // If we've reached the end, go back to beginning
+            if (gameData.currentQuestionIndex >= gameData.questions.length) {
+                gameData.currentQuestionIndex = 0;
+            }
+            
+            // Load the new question
+            loadQuestion();
+            
+            // Reset timer
+            resetTimer();
+        }
+
+        // Load current question
+        function loadQuestion() {
+            if (gameData.currentQuestionIndex >= gameData.questions.length) {
+                // No more questions, end game
+                endGame();
+                return;
+            }
+            
+            const currentQuestion = gameData.questions[gameData.currentQuestionIndex];
+            
+            // Update question text and category
+            questionText.textContent = currentQuestion.question;
+            questionCategory.textContent = currentQuestion.category;
+            
+            // Clear options grid
+            optionsGrid.innerHTML = '';
+            
+            // Add options
+            currentQuestion.options.forEach((option, index) => {
+                const optionButton = document.createElement('button');
+                optionButton.className = 'option-btn';
+                optionButton.textContent = option;
+                optionButton.dataset.index = index;
+                
+                optionButton.addEventListener('click', () => selectAnswer(index));
+                
+                optionsGrid.appendChild(optionButton);
+            });
+            
+            // Reset timer
+            resetTimer();
+        }
+
+        // Select an answer
+        function selectAnswer(selectedIndex) {
+            if (!gameData.gameActive) return;
+            
+            const currentQuestion = gameData.questions[gameData.currentQuestionIndex];
+            const options = document.querySelectorAll('.option-btn');
+            const currentTeam = gameData.teams[gameData.currentTeamIndex];
+            
+            // Disable all options
+            options.forEach(option => {
+                option.style.pointerEvents = 'none';
+            });
+            
+            // Mark correct and incorrect answers
+            options[currentQuestion.correctAnswer].classList.add('correct');
+            
+            if (selectedIndex !== currentQuestion.correctAnswer) {
+                options[selectedIndex].classList.add('incorrect');
+            } else {
+                // Correct answer!
+                let pointsEarned = 10;
+                
+                // Apply double points if tool is active
+                if (!currentTeam.helpTools.doublePoints) {
+                    pointsEarned *= 2;
+                }
+                
+                // Add points to current team
+                currentTeam.points += pointsEarned;
+                currentTeam.correctAnswers++;
+                
+                // Update teams display
+                updateTeamsDisplay();
+            }
+            
+            // Mark selected answer
+            options[selectedIndex].classList.add('selected');
+            
+            // Stop timer
+            clearInterval(gameData.timerInterval);
+            
+            // Enable next question button
+            nextQuestionButton.disabled = false;
+        }
+
+        // Start timer
+        function startTimer() {
+            clearInterval(gameData.timerInterval);
+            
+            gameData.timeLeft = 30;
+            timerElement.textContent = gameData.timeLeft;
+            
+            gameData.timerInterval = setInterval(() => {
+                gameData.timeLeft--;
+                timerElement.textContent = gameData.timeLeft;
+                
+                if (gameData.timeLeft <= 0) {
+                    clearInterval(gameData.timerInterval);
+                    timeUp();
+                }
+            }, 1000);
+        }
+
+        // Reset timer
+        function resetTimer() {
+            clearInterval(gameData.timerInterval);
+            gameData.timeLeft = 30;
+            timerElement.textContent = gameData.timeLeft;
+            startTimer();
+        }
+
+        // Time's up
+        function timeUp() {
+            const lang = gameData.currentLanguage;
+            const t = translations[lang];
+            
+            if (!gameData.gameActive) return;
+            
+            // Disable all options
+            const options = document.querySelectorAll('.option-btn');
+            options.forEach(option => {
+                option.style.pointerEvents = 'none';
+                option.classList.add('disabled');
+            });
+            
+            // Show correct answer
+            const currentQuestion = gameData.questions[gameData.currentQuestionIndex];
+            options[currentQuestion.correctAnswer].classList.add('correct');
+            
+            // Enable next question button
+            nextQuestionButton.disabled = false;
+            
+            // Show time up message
+            alert(t.timeUp);
+        }
+
+        // Move to next question
+        function nextQuestion() {
+            // Move to next team
+            gameData.currentTeamIndex = (gameData.currentTeamIndex + 1) % gameData.teams.length;
+            
+            // Move to next question
+            gameData.currentQuestionIndex++;
+            
+            // If we've reached the end of questions, end game
+            if (gameData.currentQuestionIndex >= gameData.questions.length) {
+                endGame();
+                return;
+            }
+            
+            // Load next question
+            loadQuestion();
+            
+            // Update teams display to highlight current team
+            updateTeamsDisplay();
+            
+            // Update help tools for new team
+            initializeHelpTools();
+            
+            // Disable next question button until answer is selected or time runs out
+            nextQuestionButton.disabled = true;
+        }
+
+        // End the game
+        function endGame() {
+            gameData.gameActive = false;
+            clearInterval(gameData.timerInterval);
+            switchScreen('results');
+        }
+
+        // Show results
+        function showResults() {
+            const lang = gameData.currentLanguage;
+            const t = translations[lang];
+            
+            // Sort teams by points (descending)
+            const sortedTeams = [...gameData.teams].sort((a, b) => b.points - a.points);
+            
+            // Determine winner
+            const winner = sortedTeams[0];
+            
+            // Update winner announcement
+            winnerAnnouncement.innerHTML = `
+                <h3>${t.winner}: ${winner.name}</h3>
+                <div class="winner-points">${winner.points} ${t.points}</div>
+                <p>${t.correctAnswers}: ${winner.correctAnswers}</p>
+            `;
+            
+            // Update results table
+            resultsTableBody.innerHTML = '';
+            
+            sortedTeams.forEach((team, index) => {
+                const row = document.createElement('tr');
+                
+                // Add podium classes for top 3
+                let positionClass = '';
+                if (index === 0) positionClass = 'first';
+                else if (index === 1) positionClass = 'second';
+                else if (index === 2) positionClass = 'third';
+                
+                row.innerHTML = `
+                    <td><span class="position ${positionClass}">${index + 1}</span></td>
+                    <td class="team-name">${team.name}</td>
+                    <td class="team-points">${team.points}</td>
+                    <td>${team.correctAnswers}</td>
+                `;
+                
+                resultsTableBody.appendChild(row);
+            });
+        }
+
+        // Play again
+        function playAgain() {
+            // Reset teams' points
+            gameData.teams.forEach(team => {
+                team.points = 0;
+                team.correctAnswers = 0;
+            });
+            
+            // Switch to setup screen
+            switchScreen('setup');
+        }
+
+        // Initialize the game when DOM is loaded
+        document.addEventListener('DOMContentLoaded', initGame);
+    </script>
+</body>
+</html>
